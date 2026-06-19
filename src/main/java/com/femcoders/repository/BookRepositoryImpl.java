@@ -22,14 +22,23 @@ public class BookRepositoryImpl implements BookRepository {
             statement = connection.prepareStatement(sql);
 
             statement.setString(1, book.getTitle());
+
             statement.setInt(2, book.getAuthor().getId());
+
             if (book.getPublisher() != null) {
                 statement.setInt(3, book.getPublisher().getId());
             } else {
                 statement.setNull(3, Types.INTEGER);
             }
+
             statement.setString(4, book.getIsbn());
-            statement.setInt(5, book.getPublishedYear());
+
+            if (book.getPublishedYear() != null) {
+                statement.setInt(5, book.getPublishedYear());
+            } else {
+                statement.setNull(5, Types.SMALLINT);
+            }
+
             statement.setString(6, book.getSummary());
             statement.setString(7, book.getFormat().name().toLowerCase());
             statement.setString(8, book.getGenres().toString());
