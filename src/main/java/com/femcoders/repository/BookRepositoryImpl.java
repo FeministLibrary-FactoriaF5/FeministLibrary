@@ -13,19 +13,19 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public void createBook(Book book) {
-        String sql = "INSERT INTO books (title, author, publisher, isbn, publishedYear, summary, format, genres) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO books (title, author_id, publisher_id, isbn, published_year, summary, format_id, genres) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
             connection = DBManager.getConnection();
             statement = connection.prepareStatement(sql);
 
             statement.setString(1, book.getTitle());
-            statement.setString(2, book.getAuthor());
-            statement.setString(3, book.getPublisher());
+            statement.setInt(2, book.getAuthor().getId());
+            statement.setInt(3, book.getPublisher().getId());
             statement.setString(4, book.getIsbn());
             statement.setInt(5, book.getPublishedYear());
             statement.setString(6, book.getSummary());
-            statement.setString(7, book.getFormat());
+            statement.setString(7, book.getFormat().name().toLowerCase());
             statement.setString(8, book.getGenres().toString());
 
             statement.executeUpdate();
