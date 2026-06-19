@@ -5,6 +5,7 @@ import com.femcoders.model.Book;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.Types;
 import java.util.List;
 
 public class BookRepositoryImpl implements BookRepository {
@@ -13,7 +14,8 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public void createBook(Book book) {
-        String sql = "INSERT INTO books (title, author_id, publisher_id, isbn, published_year, summary, format_id, genres) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO books (title, author_id, publisher_id, isbn, published_year, summary, format_id) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?::book_format)";
 
         try {
             connection = DBManager.getConnection();
@@ -21,7 +23,11 @@ public class BookRepositoryImpl implements BookRepository {
 
             statement.setString(1, book.getTitle());
             statement.setInt(2, book.getAuthor().getId());
-            statement.setInt(3, book.getPublisher().getId());
+            if (book.getPublisher() != null) {
+                statement.setInt(3, book.getPublisher().getId());
+            } else {
+                statement.setNull(3, Types.INTEGER);
+            }
             statement.setString(4, book.getIsbn());
             statement.setInt(5, book.getPublishedYear());
             statement.setString(6, book.getSummary());
