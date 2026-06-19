@@ -41,7 +41,7 @@ public class Book {
         this.title = title;
     }
 
-    public Author getAuthor() {
+    public String getAuthor() {
         return author;
     }
 
@@ -49,7 +49,7 @@ public class Book {
         this.author = author;
     }
 
-    public Publisher getPublisher() {
+    public String getPublisher() {
         return publisher;
     }
 
@@ -81,7 +81,7 @@ public class Book {
         this.summary = summary;
     }
 
-    public Format getFormat() {
+    public String getFormat() {
         return format;
     }
 
