@@ -1,5 +1,6 @@
 package com.femcoders.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Book {
@@ -14,7 +15,9 @@ public class Book {
     private List<Genre> genres;
 
 
-    public Book() {}
+    public Book() {
+        this.genres = new ArrayList<>();
+    }
 
     public Book(Integer id, String title, Author author, Publisher publisher, String isbn, Integer publishedYear,
                 String summary, Format format, List<Genre> genres) {
@@ -26,7 +29,7 @@ public class Book {
         this.publishedYear = publishedYear;
         this.summary = summary;
         this.format = format;
-        this.genres = genres;
+        this.genres = (genres != null) ? genres : new ArrayList<>();
     }
 
     public Integer getId() {
@@ -98,6 +101,6 @@ public class Book {
     }
 
     public void setGenres(List<Genre> genres) {
-        this.genres = genres;
+        this.genres = (genres != null) ? genres : new ArrayList<>();
     }
 }

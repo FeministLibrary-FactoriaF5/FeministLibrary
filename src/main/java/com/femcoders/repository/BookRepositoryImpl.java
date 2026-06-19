@@ -2,10 +2,9 @@ package com.femcoders.repository;
 
 import com.femcoders.config.DBManager;
 import com.femcoders.model.Book;
+import com.femcoders.model.Genre;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.Types;
+import java.sql.*;
 import java.util.List;
 
 public class BookRepositoryImpl implements BookRepository {
@@ -14,15 +13,14 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public void createBook(Book book) {
-        String sql = "INSERT INTO books (title, author_id, publisher_id, isbn, published_year, summary, format_id) " +
+        String sql = "INSERT INTO books (title, author_id, publisher_id, isbn, published_year, summary, format) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?::book_format)";
 
         try {
             connection = DBManager.getConnection();
-            statement = connection.prepareStatement(sql);
+            statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             statement.setString(1, book.getTitle());
-
             statement.setInt(2, book.getAuthor().getId());
 
             if (book.getPublisher() != null) {
@@ -41,19 +39,37 @@ public class BookRepositoryImpl implements BookRepository {
 
             statement.setString(6, book.getSummary());
             statement.setString(7, book.getFormat().name().toLowerCase());
-            statement.setString(8, book.getGenres().toString());
 
             statement.executeUpdate();
+
+            ResultSet generatedKeys = statement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                int newId = generatedKeys.getInt(1);
+                book.setId(newId);
+            }
+
+            insertGenresForBook(book);
 
             System.out.println("Book created successfully.");
 
         } catch (Exception e) {
             System.out.println("Book creation failed.");
             System.out.println(e.getMessage());
+
         } finally {
             DBManager.closeConnection();
         }
+    }
 
+    private void insertGenresForBook(Book book) throws SQLException {
+        String genreSql = "INSERT INTO genre_book (book_id, genre_id) VALUES (?, ?)";
+        PreparedStatement genreStatement = connection.prepareStatement(genreSql);
+
+        for (Genre genre : book.getGenres()) {
+            genreStatement.setInt(1, book.getId());
+            genreStatement.setInt(2, genre.getId());
+            genreStatement.executeUpdate();
+        }
     }
 
     @Override
