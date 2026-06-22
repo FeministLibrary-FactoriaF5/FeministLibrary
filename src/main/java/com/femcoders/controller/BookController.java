@@ -29,6 +29,7 @@ public class BookController {
              System.out.println("Author did not exist in the database. New author created.");
          } else {
              book.setAuthor(existingAuthor);
+             System.out.println("Author already exists. Using existing author.");
          }
 
         bookRepository.createBook(book);

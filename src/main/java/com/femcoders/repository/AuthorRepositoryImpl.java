@@ -15,7 +15,7 @@ public class AuthorRepositoryImpl implements AuthorRepository {
 
     @Override
     public Author createAuthor(Author author) {
-        String sql = "INSERT INTO authors (name) VALUES (?)";
+        String sql = "INSERT INTO authors (name) VALUES (LOWER(?))";
 
         try {
             connection = DBManager.getConnection();
@@ -44,7 +44,7 @@ public class AuthorRepositoryImpl implements AuthorRepository {
 
     @Override
     public Author readAuthorByName(String name) {
-        String sql = "SELECT id, name FROM authors WHERE name = ?";
+        String sql = "SELECT id, name FROM authors WHERE LOWER(name) = LOWER(?)";
 
         try {
             connection = DBManager.getConnection();
@@ -52,6 +52,7 @@ public class AuthorRepositoryImpl implements AuthorRepository {
             statement.setString(1, name);
 
             ResultSet resultSetAuthors = statement.executeQuery();
+
             if(resultSetAuthors.next()) {
                 Author author = new Author(
                         resultSetAuthors.getInt("id"),
