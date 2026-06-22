@@ -15,13 +15,21 @@ public class BookController {
      }
 
     public void createBook(Book book){
-        Author author = new Author();
+         Author existingAuthor = authorRepository.readAuthorByName(book.getAuthor().getName());
 
-        author.setName(book.getAuthor().getName());
+         if(existingAuthor == null){
+             Author newAuthor = new Author();
 
-        Author savedAuthor = authorRepository.createAuthor(author);
+             newAuthor.setName(book.getAuthor().getName());
 
-        book.setAuthor(savedAuthor);
+             Author savedAuthor = authorRepository.createAuthor(newAuthor);
+
+             book.setAuthor(savedAuthor);
+
+             System.out.println("Author did not exist in the database. New author created.");
+         } else {
+             book.setAuthor(existingAuthor);
+         }
 
         bookRepository.createBook(book);
     }  

@@ -44,6 +44,30 @@ public class AuthorRepositoryImpl implements AuthorRepository {
 
     @Override
     public Author readAuthorByName(String name) {
+        String sql = "SELECT id, name FROM authors WHERE name = ?";
+
+        try {
+            connection = DBManager.getConnection();
+            statement = connection.prepareStatement(sql);
+            statement.setString(1, name);
+
+            ResultSet resultSetAuthors = statement.executeQuery();
+            if(resultSetAuthors.next()) {
+                Author author = new Author(
+                        resultSetAuthors.getInt("id"),
+                        resultSetAuthors.getString("name"));
+
+                return author;
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error reading author by name.");
+            System.out.println(e.getMessage());
+
+        } finally {
+            DBManager.closeConnection();
+        }
+
         return null;
     }
 }
