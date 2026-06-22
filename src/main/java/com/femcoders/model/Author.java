@@ -1,10 +1,13 @@
 package com.femcoders.model;
 
 public class Author {
-    private int id;
+    private Integer id;
     private String name;
 
-    public Author(int id, String name) {
+    public Author() {
+    }
+
+    public Author(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -13,7 +16,7 @@ public class Author {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
