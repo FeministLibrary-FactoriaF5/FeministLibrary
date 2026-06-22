@@ -5,6 +5,7 @@ import com.femcoders.model.Author;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class AuthorRepositoryImpl implements AuthorRepository {
@@ -14,7 +15,7 @@ public class AuthorRepositoryImpl implements AuthorRepository {
 
     @Override
     public Author createAuthor(Author author) {
-        String sql = "INSERT INTO author (name) VALUES (?)";
+        String sql = "INSERT INTO authors (name) VALUES (?)";
 
         try {
             connection = DBManager.getConnection();
@@ -23,6 +24,11 @@ public class AuthorRepositoryImpl implements AuthorRepository {
             statement.setString(1, author.getName());
 
             statement.executeUpdate();
+
+            ResultSet generatedKeys = statement.getGeneratedKeys();
+            if(generatedKeys.next()) {
+                author.setId(generatedKeys.getInt(1));
+            }
 
             System.out.println("Author created successfully.");
 

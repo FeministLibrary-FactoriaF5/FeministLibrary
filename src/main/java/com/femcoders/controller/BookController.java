@@ -8,9 +8,10 @@ import com.femcoders.repository.BookRepository;
 public class BookController {
      private BookRepository bookRepository;
      private AuthorRepository authorRepository;
-     
-     public BookController(BookRepository bookRepository){
+
+     public BookController(BookRepository bookRepository, AuthorRepository authorRepository){
         this.bookRepository = bookRepository;
+        this.authorRepository = authorRepository;
      }
 
     public void createBook(Book book){
