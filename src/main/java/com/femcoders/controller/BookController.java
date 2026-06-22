@@ -20,7 +20,7 @@ public class BookController {
 
     public void createBook(Book book){
         Author author = authorRepository.validateExistingAuthor(book.getAuthor().getName());
-        Publisher publisher = publisherRepository.createPublisher(book.getPublisher());
+        Publisher publisher = publisherRepository.validateExistingPublisher(book.getPublisher().getName());
 
         book.setAuthor(author);
         book.setPublisher(publisher);

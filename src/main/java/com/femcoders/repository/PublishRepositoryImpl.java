@@ -71,4 +71,24 @@ public class PublishRepositoryImpl implements PublisherRepository {
         return null;
     }
 
+    @Override
+    public Publisher validateExistingPublisher(String name) {
+        Publisher existingPublisher = readPublisherByName(name);
+
+        if (existingPublisher == null) {
+            Publisher newPublisher = new Publisher();
+
+            newPublisher.setName(name);
+
+            Publisher savedPublisher = createPublisher(newPublisher);
+
+            System.out.println("Publisher did not exist in the database. New publisher created.");
+
+            return savedPublisher;
+        }
+
+        System.out.println("Publisher already exists. Using existing publisher.");
+
+        return existingPublisher;
+    }
 }
