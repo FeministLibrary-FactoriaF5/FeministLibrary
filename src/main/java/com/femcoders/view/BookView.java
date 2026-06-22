@@ -23,11 +23,8 @@ public class BookView {
         System.out.println("Introduce title: ");
         String title = scanner.nextLine();
 
-        //System.out.println("Introduce Author:");
-        //String author = scanner.nextLine();
-
-        // Author fijo de prueba (id=1 ya existe en la base de datos)
-        Author author = new Author(1, "Autor de prueba");
+        System.out.println("Introduce author name:");
+        String authorName = scanner.nextLine();
 
         //System.out.println("Introduce Publisher:");
         //String publisher = scanner.nextLine();
@@ -52,6 +49,9 @@ public class BookView {
             // Pendiente: buscar el id real del género en la base de datos.
             genres.add(new Genre(1, genreName.trim()));
         }
+
+        Author author = new Author();
+        author.setName(authorName);
 
         Book book = new Book();
         book.setTitle(title);
