@@ -15,9 +15,9 @@ public class BookController {
      }
 
     public void createBook(Book book){
-         Author existingAuthor = authorRepository.readAuthorByName(book.getAuthor().getName());
+         //Author existingAuthor = authorRepository.readAuthorByName(book.getAuthor().getName());
 
-         if(existingAuthor == null){
+       /*  if(existingAuthor == null){
              Author newAuthor = new Author();
 
              newAuthor.setName(book.getAuthor().getName());
@@ -31,6 +31,10 @@ public class BookController {
              book.setAuthor(existingAuthor);
              System.out.println("Author already exists. Using existing author.");
          }
+*/
+        Author author = authorRepository.validateExistingAuthor(book.getAuthor().getName());
+
+        book.setAuthor(author);
 
         bookRepository.createBook(book);
     }  

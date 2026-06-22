@@ -71,4 +71,23 @@ public class AuthorRepositoryImpl implements AuthorRepository {
 
         return null;
     }
+
+    @Override
+    public Author validateExistingAuthor(String name) {
+        Author existingAuthor = readAuthorByName(name);
+
+        if(existingAuthor == null) {
+            Author newAuthor = new Author();
+
+            newAuthor.setName(name);
+
+            Author savedAuthor = createAuthor(newAuthor);
+
+            System.out.println("Author did not exist in the database. New author created.");
+
+            return savedAuthor;
+        }
+        System.out.println("Author already exists. Using existing author.");
+        return existingAuthor;
+    }
 }
