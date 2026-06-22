@@ -15,23 +15,6 @@ public class BookController {
      }
 
     public void createBook(Book book){
-         //Author existingAuthor = authorRepository.readAuthorByName(book.getAuthor().getName());
-
-       /*  if(existingAuthor == null){
-             Author newAuthor = new Author();
-
-             newAuthor.setName(book.getAuthor().getName());
-
-             Author savedAuthor = authorRepository.createAuthor(newAuthor);
-
-             book.setAuthor(savedAuthor);
-
-             System.out.println("Author did not exist in the database. New author created.");
-         } else {
-             book.setAuthor(existingAuthor);
-             System.out.println("Author already exists. Using existing author.");
-         }
-*/
         Author author = authorRepository.validateExistingAuthor(book.getAuthor().getName());
 
         book.setAuthor(author);

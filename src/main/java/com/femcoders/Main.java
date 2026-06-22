@@ -13,9 +13,6 @@ import com.femcoders.view.BookView;
 public class Main {
     public static void main(String[] args) {
 
-        //DBManager.getConnection();
-        //DBManager.closeConnection();
-
         BookRepository bookRepository = new BookRepositoryImpl();
         AuthorRepository authorRepository = new AuthorRepositoryImpl();
 
