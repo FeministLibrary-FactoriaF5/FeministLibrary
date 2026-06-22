@@ -5,10 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.femcoders.controller.BookController;
-import com.femcoders.model.Author;
-import com.femcoders.model.Book;
-import com.femcoders.model.Format;
-import com.femcoders.model.Genre;
+import com.femcoders.model.*;
 
 public class BookView {
     private BookController bookController;
@@ -26,8 +23,8 @@ public class BookView {
         System.out.println("Introduce author name:");
         String authorName = scanner.nextLine();
 
-        //System.out.println("Introduce Publisher:");
-        //String publisher = scanner.nextLine();
+        System.out.println("Introduce Publisher:");
+        String publisherName = scanner.nextLine();
 
         System.out.println("Introduce ISBN (13 characters): ");
         String isbn = scanner.nextLine();
@@ -53,10 +50,13 @@ public class BookView {
         Author author = new Author();
         author.setName(authorName);
 
+        Publisher publisher = new Publisher();
+        publisher.setName(publisherName);
+
         Book book = new Book();
         book.setTitle(title);
         book.setAuthor(author);
-        book.setPublisher(null); // sin editorial, para probar el caso null
+        book.setPublisher(publisher);
         book.setIsbn(isbn);
         book.setPublishedYear(publishedYear);
         book.setSummary(summary);

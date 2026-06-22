@@ -31,10 +31,12 @@ public class PublishRepositoryImpl implements PublisherRepository {
 
             System.out.println("Publisher created successfully.");
             return publisher;
+
         } catch (Exception e) {
             System.out.println("Publisher creation failed.");
             System.out.println(e.getMessage());
             return null;
+
         } finally {
             DBManager.closeConnection();
         }
@@ -58,15 +60,15 @@ public class PublishRepositoryImpl implements PublisherRepository {
                 return new Publisher(id, publisherName);
             }
 
-            return null;
-
         } catch (Exception e) {
             System.out.println("Publisher not found.");
             System.out.println(e.getMessage());
-            return null;
+
         } finally {
-            DBManager.closeConnection();{
-            }
+            DBManager.closeConnection();
         }
+
+        return null;
     }
+
 }
