@@ -6,6 +6,7 @@ import java.util.Scanner;
 import com.femcoders.controller.BookController;
 import com.femcoders.repository.*;
 import com.femcoders.view.BookView;
+import com.femcoders.view.MenuView;
 
 public class Main {
     public static void main(String[] args) {
@@ -18,7 +19,12 @@ public class Main {
         BookView bookView = new BookView(bookController);
         Scanner scanner = new Scanner(System.in);
 
-        bookView.createBook(scanner);
+        MenuView menuView = new MenuView(scanner,bookView);
 
+        menuView.start();
+
+        //bookView.createBook(scanner);
+
+        scanner.close();
         }
     }
