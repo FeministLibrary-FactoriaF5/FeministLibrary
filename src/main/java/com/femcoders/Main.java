@@ -25,8 +25,6 @@ public class Main {
 
         menuView.start();
 
-        //bookView.createBook(scanner);
-
         scanner.close();
         }
     }

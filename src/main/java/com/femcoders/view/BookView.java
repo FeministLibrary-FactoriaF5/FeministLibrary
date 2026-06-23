@@ -64,9 +64,6 @@ public class BookView {
             publisher.setName(publisherName.trim());
         }
 
-        /*Publisher publisher = new Publisher();
-        publisher.setName(publisherName);*/
-
         Book book = new Book();
         book.setTitle(title);
         book.setAuthor(author);
@@ -78,5 +75,44 @@ public class BookView {
         book.setGenres(genres);
 
         bookController.createBook(book);
+    }
+
+    public void searchByTitle(Scanner scanner) {
+        System.out.println("=== Search book by exact title ===");
+        System.out.println("Introduce the exact title: ");
+
+        List<Book> booksList = bookController.readBooksByTitle(scanner.nextLine());
+
+        if (booksList.isEmpty()) {
+            System.out.println("No books found with that exact title.");
+            return;
+        }
+
+        System.out.println("Books Found:");
+
+        for (Book book : booksList) {
+
+            System.out.println("\n================ BOOK ================");
+            System.out.println("ID:            " + book.getId());
+            System.out.println("Title:         " + book.getTitle());
+            System.out.println("Author:        " + (book.getAuthor() != null ? book.getAuthor().getName() : "N/A"));
+            System.out
+                    .println("Publisher:     " + (book.getPublisher() != null ? book.getPublisher().getName() : "N/A"));
+            System.out.println("ISBN:          " + book.getIsbn());
+            System.out.println("Year:          " + book.getPublishedYear());
+            System.out.println("Format:        " + book.getFormat());
+            System.out.println("Summary:       " + book.getSummary());
+
+            System.out.print("Genres:        ");
+                   List<Genre> genres = book.getGenres();
+            for (int i = 0; i < genres.size(); i++) {
+                System.out.print(genres.get(i).getName());
+                if (i < genres.size() - 1) {
+                    System.out.print(", ");
+                }
+            }
+
+            System.out.println("\n======================================\n");
+        }
     }
 }

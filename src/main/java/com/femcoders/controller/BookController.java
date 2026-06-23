@@ -14,17 +14,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BookController {
-     private BookRepository bookRepository;
-     private AuthorRepository authorRepository;
-     private PublisherRepository publisherRepository;
-     private GenreRepository genreRepository;
+    private BookRepository bookRepository;
+    private AuthorRepository authorRepository;
+    private PublisherRepository publisherRepository;
+    private GenreRepository genreRepository;
 
-     public BookController(BookRepository bookRepository, AuthorRepository authorRepository, PublisherRepository publisherRepository, GenreRepository genreRepository){
+    public BookController(BookRepository bookRepository, AuthorRepository authorRepository,
+            PublisherRepository publisherRepository, GenreRepository genreRepository) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
         this.publisherRepository = publisherRepository;
         this.genreRepository = genreRepository;
-     }
+    }
 
     public void createBook(Book book) {
         if (!book.getIsbn().matches("\\d{13}")) {
@@ -53,5 +54,25 @@ public class BookController {
         book.setGenres(genres);
 
         bookRepository.createBook(book);
+    }
+
+    public List<Book> readBooksByTitle(String title) {
+        // return bookRepository.readBooksByTitle(title);
+
+        List<Book> books = bookRepository.readBooksByTitle(title);
+
+        for (Book book : books) {
+
+            Author author = authorRepository.findById(book.getAuthorId());
+
+            Publisher publisher = publisherRepository.findById(book.getPublisherId());
+
+            List<Genre> genres = genreRepository.readGenresForBook(book.getId());
+
+            book.setAuthor(author);
+            book.setPublisher(publisher);
+            book.setGenres(genres);
+    }
+        return books;
     }
 }

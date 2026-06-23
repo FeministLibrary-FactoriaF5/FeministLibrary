@@ -1,6 +1,7 @@
 package com.femcoders.repository;
 
 import com.femcoders.config.DBManager;
+import com.femcoders.model.Author;
 import com.femcoders.model.Publisher;
 import com.femcoders.view.Colors;
 
@@ -88,4 +89,33 @@ public class PublisherRepositoryImpl implements PublisherRepository {
         System.out.println(Colors.GREEN + "✅ Publisher found: " + existingPublisher.getName() + Colors.RESET);
         return existingPublisher;
     }
+
+    @Override
+    public Publisher findById(int id){
+
+        String sql = "SELECT * FROM publishers WHERE id = ?";
+         try {
+            Connection connection = DBManager.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            statement.setInt(1, id);
+
+            ResultSet rs = statement.executeQuery();
+
+            if(rs.next()) {
+               Publisher publisher = new Publisher();
+                publisher.setId(rs.getInt("id"));
+                publisher.setName(rs.getString("name"));
+
+                return publisher;
+            }
+
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+
+
+        return null;
+    }
+
 }

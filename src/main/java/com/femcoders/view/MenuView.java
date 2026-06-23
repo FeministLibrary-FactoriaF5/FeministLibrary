@@ -54,6 +54,9 @@ public class MenuView {
                     break;
                 case 2:
                     break;
+                case 3:
+                    bookView.searchByTitle(scanner);
+                    break;
 
                 default:
                     System.out.println(Colors.RED + "❌Invalid option. Please enter a number from 0 to 7." + Colors.RESET);
