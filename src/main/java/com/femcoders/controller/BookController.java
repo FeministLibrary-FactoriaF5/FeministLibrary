@@ -64,11 +64,10 @@ public class BookController {
 
             Author author = authorRepository.findById(book.getAuthorId());
 
-            // Publisher publisher =
-            // publisherRepository.findById(book.getPublisherId());
+            Publisher publisher = publisherRepository.findById(book.getPublisherId());
 
             book.setAuthor(author);
-            // book.setPublisher(publisher);
+            book.setPublisher(publisher);
         }
 
         return books;

@@ -46,7 +46,7 @@ public class MenuView {
                     break;
                 case 2:
                     break;
-                case 4:
+                case 3:
                     bookView.searchByTitle(scanner);
                     break;
 
