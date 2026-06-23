@@ -2,22 +2,28 @@ package com.femcoders.controller;
 
 import com.femcoders.model.Author;
 import com.femcoders.model.Book;
+import com.femcoders.model.Genre;
 import com.femcoders.model.Publisher;
 import com.femcoders.repository.AuthorRepository;
 import com.femcoders.repository.BookRepository;
+import com.femcoders.repository.GenreRepository;
 import com.femcoders.repository.PublisherRepository;
 
-public class BookController {
-    private BookRepository bookRepository;
-    private AuthorRepository authorRepository;
-    private PublisherRepository publisherRepository;
+import java.util.ArrayList;
+import java.util.List;
 
-    public BookController(BookRepository bookRepository, AuthorRepository authorRepository,
-            PublisherRepository publisherRepository) {
+public class BookController {
+     private BookRepository bookRepository;
+     private AuthorRepository authorRepository;
+     private PublisherRepository publisherRepository;
+     private GenreRepository genreRepository;
+
+     public BookController(BookRepository bookRepository, AuthorRepository authorRepository, PublisherRepository publisherRepository, GenreRepository genreRepository){
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
         this.publisherRepository = publisherRepository;
-    }
+        this.genreRepository = genreRepository;
+     }
 
     public void createBook(Book book) {
         if (!book.getIsbn().matches("\\d{13}")) {
@@ -31,10 +37,19 @@ public class BookController {
         }
 
         Author author = authorRepository.validateExistingAuthor(book.getAuthor().getName());
+
         Publisher publisher = publisherRepository.validateExistingPublisher(book.getPublisher().getName());
+
+        List<Genre> genres = new ArrayList<>();
+
+        for (Genre genre : book.getGenres()){
+            Genre validated = genreRepository.validadeExistingGenre(genre.getName());
+            genres.add(validated);
+        }
 
         book.setAuthor(author);
         book.setPublisher(publisher);
+        book.setGenres(genres);
 
         bookRepository.createBook(book);
     }
