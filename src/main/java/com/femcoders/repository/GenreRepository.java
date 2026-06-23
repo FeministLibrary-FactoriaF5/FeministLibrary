@@ -8,5 +8,5 @@ public interface GenreRepository {
 
     //READ
     Genre readGenreByName(String name);
-    Genre validadeExistingGenre(String name);
+    Genre validateExistingGenre(String name);
 }
