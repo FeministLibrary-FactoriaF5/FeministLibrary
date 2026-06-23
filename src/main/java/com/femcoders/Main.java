@@ -16,6 +16,7 @@ public class Main {
         PublisherRepository publisherRepository = new PublishRepositoryImpl();
 
         BookController bookController = new BookController(bookRepository, authorRepository, publisherRepository);
+        
         BookView bookView = new BookView(bookController);
         Scanner scanner = new Scanner(System.in);
 
