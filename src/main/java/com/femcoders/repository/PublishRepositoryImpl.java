@@ -91,4 +91,13 @@ public class PublishRepositoryImpl implements PublisherRepository {
 
         return existingPublisher;
     }
+
+    @Override
+    public Publisher findById(int id){
+
+        String sql = "SELECT * FROM publishers WHERE id = ?";
+
+        return null;
+    }
+
 }

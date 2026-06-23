@@ -90,4 +90,32 @@ public class AuthorRepositoryImpl implements AuthorRepository {
         System.out.println("Author already exists. Using existing author.");
         return existingAuthor;
     }
+    
+    @Override
+    public Author findById(int id) {
+
+        String sql = "SELECT * FROM authors WHERE id = ?";
+
+        try {
+            Connection connection = DBManager.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            statement.setInt(1, id);
+
+            ResultSet rs = statement.executeQuery();
+
+            if(rs.next()) {
+                Author author = new Author();
+                author.setId(rs.getInt("id"));
+                author.setName(rs.getString("name"));
+
+                return author;
+            }
+
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }

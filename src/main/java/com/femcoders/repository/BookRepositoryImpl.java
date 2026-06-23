@@ -149,6 +149,9 @@ public class BookRepositoryImpl implements BookRepository {
                 book.setSummary(resultSet.getString("summary"));
                 book.setFormat(Format.valueOf(resultSet.getString("format").toUpperCase()));
 
+                book.setAuthorId(resultSet.getInt("author_id"));
+                book.setPublisherId(resultSet.getInt("publisher_id"));
+                
                 booksList.add(book);
             }
 

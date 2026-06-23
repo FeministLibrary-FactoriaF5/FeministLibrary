@@ -10,4 +10,6 @@ public interface PublisherRepository {
     Publisher readPublisherByName(String name);
     Publisher validateExistingPublisher(String name);
 
+    Publisher findById(int id);
+
 }
