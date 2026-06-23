@@ -32,6 +32,9 @@ public class Book {
         this.genres = (genres != null) ? genres : new ArrayList<>();
     }
 
+    public Book(int id, String isbn) {
+    }
+
     public Integer getId() {
         return id;
     }
