@@ -71,6 +71,45 @@ public class BookRepositoryImpl implements BookRepository {
             genreStatement.executeUpdate();
         }
     }
+    
+    @Override
+    public Boolean validateExistingIsbn(String isbn) {
+        Book existingIsbn = readBookByIsbn(isbn);
+
+        if (existingIsbn == null) {
+            return false;
+        }
+        return true;
+    }
+
+    private Book readBookByIsbn(String isbn) {
+        String sql = "SELECT id, isbn FROM books WHERE isbn = ?";
+
+        try {
+            connection = DBManager.getConnection();
+            statement = connection.prepareStatement(sql);
+            statement.setString(1, isbn);
+
+            ResultSet resultSetIsbn = statement.executeQuery();
+
+            if (resultSetIsbn.next()) {
+                Book book = new Book(
+                        resultSetIsbn.getInt("id"),
+                        resultSetIsbn.getString("isbn"));
+
+                return book;
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error reading book by ISBN.");
+            System.out.println(e.getMessage());
+
+        } finally {
+            DBManager.closeConnection();
+        }
+
+        return null;
+    }
 
     @Override
     public Book readBookById(int id) {

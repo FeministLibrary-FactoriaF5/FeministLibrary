@@ -19,12 +19,19 @@ public class BookController {
      }
 
     public void createBook(Book book){
-        Author author = authorRepository.validateExistingAuthor(book.getAuthor().getName());
-        Publisher publisher = publisherRepository.validateExistingPublisher(book.getPublisher().getName());
+        if (!bookRepository.validateExistingIsbn(book.getIsbn())) {
 
-        book.setAuthor(author);
-        book.setPublisher(publisher);
+            Author author = authorRepository.validateExistingAuthor(book.getAuthor().getName());
+            Publisher publisher = publisherRepository.validateExistingPublisher(book.getPublisher().getName());
 
-        bookRepository.createBook(book);
+            book.setAuthor(author);
+            book.setPublisher(publisher);
+
+            bookRepository.createBook(book);
+        }
+
+        else {
+            System.out.println("This ISBN already exists. We can not add this book.");
+        }
     }  
 }
