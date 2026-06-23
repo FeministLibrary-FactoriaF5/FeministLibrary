@@ -10,7 +10,7 @@ import com.femcoders.model.*;
 public class BookView {
     private BookController bookController;
 
-    public BookView (BookController bookController){
+    public BookView(BookController bookController) {
         this.bookController = bookController;
     }
 
@@ -29,14 +29,27 @@ public class BookView {
         System.out.println("Introduce ISBN (13 characters): ");
         String isbn = scanner.nextLine();
 
+
         System.out.println("Introduce year of publishing: ");
         Integer publishedYear = Integer.parseInt(scanner.nextLine());
 
         System.out.println("Introduce summary: (max 200 characters) ");
         String summary = scanner.nextLine();
 
-        System.out.println("Introduce format: (paperback / hardcover / ebook / audiobook) ");
-        Format format = Format.valueOf(scanner.nextLine().toUpperCase());
+        //System.out.println("Introduce format: (paperback / hardcover / ebook / audiobook) ");
+        //Format format = Format.valueOf(scanner.nextLine().toUpperCase());
+
+        Format format = null;
+        while (format == null) {
+            System.out.println("Introduce format (paperback / hardcover / ebook / audiobook): ");
+            String formatInput = scanner.nextLine();
+            try {
+                format = Format.valueOf(formatInput.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid format. Please choose one of: paperback, hardcover, ebook, audiobook.");
+            }
+        }
+
 
         System.out.println("Introduce genre (separated by comma, ex: horror, satire): ");
         String genresInput = scanner.nextLine();

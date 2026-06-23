@@ -25,7 +25,17 @@ public class BookController {
         this.genreRepository = genreRepository;
      }
 
-    public void createBook(Book book){
+    public void createBook(Book book) {
+        if (!book.getIsbn().matches("\\d{13}")) {
+            System.out.println("Invalid ISBN. It must contain exactly 13 numeric digits.");
+            return;
+        }
+
+        if (bookRepository.validateExistingIsbn(book.getIsbn())) {
+            System.out.println("This ISBN already exists. We can not add this book.");
+            return;
+        }
+
         Author author = authorRepository.validateExistingAuthor(book.getAuthor().getName());
 
         Publisher publisher = publisherRepository.validateExistingPublisher(book.getPublisher().getName());
@@ -42,5 +52,5 @@ public class BookController {
         book.setGenres(genres);
 
         bookRepository.createBook(book);
-    }  
+    }
 }
