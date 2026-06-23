@@ -75,7 +75,7 @@ public class GenreRepositoryImpl implements GenreRepository {
     }
 
     @Override
-    public Genre validadeExistingGenre(String name) {
+    public Genre validateExistingGenre(String name) {
         Genre existingGenre = readGenreByName(name);
 
         if(existingGenre == null) {

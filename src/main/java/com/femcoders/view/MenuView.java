@@ -46,6 +46,9 @@ public class MenuView {
                     break;
                 case 2:
                     break;
+                case 4:
+                    bookView.searchByTitle(scanner);
+                    break;
 
                 default:
                     System.out.println("Invalid option. Please enter a number from 0 to 7.");

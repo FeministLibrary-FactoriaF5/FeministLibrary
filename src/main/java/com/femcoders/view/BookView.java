@@ -14,7 +14,7 @@ public class BookView {
         this.bookController = bookController;
     }
 
-    public void createBook(Scanner scanner){
+    public void createBook(Scanner scanner) {
         System.out.println("===Create book===");
 
         System.out.println("Introduce title: ");
@@ -29,15 +29,11 @@ public class BookView {
         System.out.println("Introduce ISBN (13 characters): ");
         String isbn = scanner.nextLine();
 
-
         System.out.println("Introduce year of publishing: ");
         Integer publishedYear = Integer.parseInt(scanner.nextLine());
 
         System.out.println("Introduce summary: (max 200 characters) ");
         String summary = scanner.nextLine();
-
-        //System.out.println("Introduce format: (paperback / hardcover / ebook / audiobook) ");
-        //Format format = Format.valueOf(scanner.nextLine().toUpperCase());
 
         Format format = null;
         while (format == null) {
@@ -49,7 +45,6 @@ public class BookView {
                 System.out.println("Invalid format. Please choose one of: paperback, hardcover, ebook, audiobook.");
             }
         }
-
 
         System.out.println("Introduce genre (separated by comma, ex: horror, satire): ");
         String genresInput = scanner.nextLine();
@@ -77,4 +72,47 @@ public class BookView {
         bookController.createBook(book);
 
     }
+
+    public void searchByTitle(Scanner scanner) {
+        System.out.println("=== Search book by exact title ===");
+        System.out.println("Introduce the exact title: ");
+
+        List<Book> booksList = bookController.readBooksByTitle(scanner.nextLine());
+
+        if (booksList.isEmpty()) {
+            System.out.println("No books found with that exact title.");
+            return;
+        }
+
+        System.out.println("Books Found:");
+
+        for (Book book : booksList) {
+
+            // System.out.println("id:" + book.getId());
+            // System.out.println("title:" + book.getTitle());
+            System.out.println("\n================ BOOK ================");
+            System.out.println("ID:            " + book.getId());
+            System.out.println("Title:         " + book.getTitle());
+            System.out.println("Author:        " + (book.getAuthor() != null ? book.getAuthor().getName() : "N/A"));
+            System.out
+                    .println("Publisher:     " + (book.getPublisher() != null ? book.getPublisher().getName() : "N/A"));
+            System.out.println("ISBN:          " + book.getIsbn());
+            System.out.println("Year:          " + book.getPublishedYear());
+            System.out.println("Format:        " + book.getFormat());
+            System.out.println("Summary:       " + book.getSummary());
+
+            System.out.print("Genres:        ");
+            if (book.getGenres() != null && !book.getGenres().isEmpty()) {
+                for (Genre g : book.getGenres()) {
+                    System.out.print(g.getName() + " ");
+                }
+            } else {
+                System.out.print("N/A");
+            }
+
+            System.out.println("\n======================================\n");
+
+        }
+    }
+
 }

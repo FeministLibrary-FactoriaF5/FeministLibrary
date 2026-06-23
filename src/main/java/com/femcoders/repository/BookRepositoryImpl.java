@@ -2,9 +2,11 @@ package com.femcoders.repository;
 
 import com.femcoders.config.DBManager;
 import com.femcoders.model.Book;
+import com.femcoders.model.Format;
 import com.femcoders.model.Genre;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BookRepositoryImpl implements BookRepository {
@@ -71,7 +73,7 @@ public class BookRepositoryImpl implements BookRepository {
             genreStatement.executeUpdate();
         }
     }
-    
+
     @Override
     public Boolean validateExistingIsbn(String isbn) {
         Book existingIsbn = readBookByIsbn(isbn);
@@ -123,7 +125,44 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public List<Book> readBooksByTitle(String title) {
-        return List.of();
+        List<Book> booksList = new ArrayList<>();
+            
+        String sql = "SELECT * FROM books WHERE title = ?";
+
+        System.out.println("Buscando: " + title);
+
+        try {
+            connection = DBManager.getConnection();
+            statement = connection.prepareStatement(sql);
+            statement.setString(1, title);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                System.out.println("Encontrado: " + resultSet.getString("title"));
+
+                Book book = new Book();
+                book.setId(resultSet.getInt("id"));
+                book.setTitle(resultSet.getString("title"));
+                book.setIsbn(resultSet.getString("isbn"));
+                book.setPublishedYear(resultSet.getInt("published_year"));
+                book.setSummary(resultSet.getString("summary"));
+                book.setFormat(Format.valueOf(resultSet.getString("format").toUpperCase()));
+
+                booksList.add(book);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error reading book by Title.");
+            //System.out.println(e.getMessage());
+
+            e.printStackTrace();
+
+        } finally {
+            DBManager.closeConnection();
+        }
+        
+        return booksList;
     }
 
     @Override

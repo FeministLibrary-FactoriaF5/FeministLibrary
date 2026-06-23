@@ -13,17 +13,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BookController {
-     private BookRepository bookRepository;
-     private AuthorRepository authorRepository;
-     private PublisherRepository publisherRepository;
-     private GenreRepository genreRepository;
+    private BookRepository bookRepository;
+    private AuthorRepository authorRepository;
+    private PublisherRepository publisherRepository;
+    private GenreRepository genreRepository;
 
-     public BookController(BookRepository bookRepository, AuthorRepository authorRepository, PublisherRepository publisherRepository, GenreRepository genreRepository){
+    public BookController(BookRepository bookRepository, AuthorRepository authorRepository,
+            PublisherRepository publisherRepository, GenreRepository genreRepository) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
         this.publisherRepository = publisherRepository;
         this.genreRepository = genreRepository;
-     }
+    }
 
     public void createBook(Book book) {
         if (!book.getIsbn().matches("\\d{13}")) {
@@ -42,8 +43,8 @@ public class BookController {
 
         List<Genre> genres = new ArrayList<>();
 
-        for (Genre genre : book.getGenres()){
-            Genre validated = genreRepository.validadeExistingGenre(genre.getName());
+        for (Genre genre : book.getGenres()) {
+            Genre validated = genreRepository.validateExistingGenre(genre.getName());
             genres.add(validated);
         }
 
@@ -52,5 +53,9 @@ public class BookController {
         book.setGenres(genres);
 
         bookRepository.createBook(book);
+    }
+
+    public List<Book> readBooksByTitle(String title) {
+        return bookRepository.readBooksByTitle(title);
     }
 }
