@@ -13,7 +13,7 @@ public class Main {
 
         BookRepository bookRepository = new BookRepositoryImpl();
         AuthorRepository authorRepository = new AuthorRepositoryImpl();
-        PublisherRepository publisherRepository = new PublishRepositoryImpl();
+        PublisherRepository publisherRepository = new PublisherRepositoryImpl();
         GenreRepository genreRepository = new GenreRepositoryImpl();
 
         BookController bookController = new BookController(bookRepository, authorRepository, publisherRepository, genreRepository);

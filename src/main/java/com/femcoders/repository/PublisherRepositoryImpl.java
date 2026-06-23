@@ -3,13 +3,14 @@ package com.femcoders.repository;
 import com.femcoders.config.DBManager;
 import com.femcoders.model.Author;
 import com.femcoders.model.Publisher;
+import com.femcoders.view.Colors;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-public class PublishRepositoryImpl implements PublisherRepository {
+public class PublisherRepositoryImpl implements PublisherRepository {
 
     Connection connection;
     PreparedStatement statement;
@@ -30,12 +31,11 @@ public class PublishRepositoryImpl implements PublisherRepository {
                 publisher.setId(generatedKeys.getInt(1));
             }
 
-            System.out.println("Publisher created successfully.");
+            // System.out.println(Colors.GREEN + "✅ Publisher created successfully." + Colors.RESET);
             return publisher;
 
         } catch (Exception e) {
-            System.out.println("Publisher creation failed.");
-            System.out.println(e.getMessage());
+            System.out.println(Colors.RED + "❌ Publisher creation failed: " + e.getMessage() + Colors.RESET);
             return null;
 
         } finally {
@@ -62,8 +62,7 @@ public class PublishRepositoryImpl implements PublisherRepository {
             }
 
         } catch (Exception e) {
-            System.out.println("Publisher not found.");
-            System.out.println(e.getMessage());
+            System.out.println(Colors.RED + "❌ Error reading publisher by name: " + e.getMessage() + Colors.RESET);
 
         } finally {
             DBManager.closeConnection();
@@ -83,13 +82,11 @@ public class PublishRepositoryImpl implements PublisherRepository {
 
             Publisher savedPublisher = createPublisher(newPublisher);
 
-            System.out.println("Publisher did not exist in the database. New publisher created.");
-
+            System.out.println(Colors.GREEN + "✅ Publisher not found. A new publisher has been created." + Colors.RESET);
             return savedPublisher;
         }
 
-        System.out.println("Publisher already exists. Using existing publisher.");
-
+        System.out.println(Colors.GREEN + "✅ Publisher found: " + existingPublisher.getName() + Colors.RESET);
         return existingPublisher;
     }
 

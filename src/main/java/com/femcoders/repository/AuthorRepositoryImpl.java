@@ -2,6 +2,7 @@ package com.femcoders.repository;
 
 import com.femcoders.config.DBManager;
 import com.femcoders.model.Author;
+import com.femcoders.view.Colors;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,19 +23,17 @@ public class AuthorRepositoryImpl implements AuthorRepository {
             statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             statement.setString(1, author.getName());
-
             statement.executeUpdate();
 
             ResultSet generatedKeys = statement.getGeneratedKeys();
-            if(generatedKeys.next()) {
+            if (generatedKeys.next()) {
                 author.setId(generatedKeys.getInt(1));
             }
 
-            System.out.println("Author created successfully.");
+            // System.out.println(Colors.GREEN + "✅ Author created successfully." + Colors.RESET);
 
         } catch (Exception e) {
-            System.out.println("Author creation failed.");
-            System.out.println(e.getMessage());
+            System.out.println(Colors.RED + "❌ Author creation failed: " + e.getMessage() + Colors.RESET);
 
         } finally {
             DBManager.closeConnection();
@@ -53,7 +52,7 @@ public class AuthorRepositoryImpl implements AuthorRepository {
 
             ResultSet resultSetAuthors = statement.executeQuery();
 
-            if(resultSetAuthors.next()) {
+            if (resultSetAuthors.next()) {
                 Author author = new Author(
                         resultSetAuthors.getInt("id"),
                         resultSetAuthors.getString("name"));
@@ -62,8 +61,7 @@ public class AuthorRepositoryImpl implements AuthorRepository {
             }
 
         } catch (Exception e) {
-            System.out.println("Error reading author by name.");
-            System.out.println(e.getMessage());
+            System.out.println(Colors.RED + "❌ Error reading author by name: " + e.getMessage() + Colors.RESET);
 
         } finally {
             DBManager.closeConnection();
@@ -76,18 +74,15 @@ public class AuthorRepositoryImpl implements AuthorRepository {
     public Author validateExistingAuthor(String name) {
         Author existingAuthor = readAuthorByName(name);
 
-        if(existingAuthor == null) {
+        if (existingAuthor == null) {
             Author newAuthor = new Author();
-
             newAuthor.setName(name);
-
             Author savedAuthor = createAuthor(newAuthor);
-
-            System.out.println("Author did not exist in the database. New author created.");
-
+            System.out.println(Colors.GREEN + "✅ Author not found. A new author has been created." + Colors.RESET);
             return savedAuthor;
         }
-        System.out.println("Author already exists. Using existing author.");
+
+        System.out.println(Colors.GREEN + "✅ Author found: " + existingAuthor.getName() + Colors.RESET);
         return existingAuthor;
     }
     

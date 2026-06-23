@@ -4,6 +4,7 @@ import com.femcoders.config.DBManager;
 import com.femcoders.model.Book;
 import com.femcoders.model.Format;
 import com.femcoders.model.Genre;
+import com.femcoders.view.Colors;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -52,11 +53,10 @@ public class BookRepositoryImpl implements BookRepository {
 
             insertGenresForBook(book);
 
-            System.out.println("Book created successfully.");
+            System.out.println(Colors.GREEN + "✅ Book created successfully." + Colors.RESET);
 
         } catch (Exception e) {
-            System.out.println("Book creation failed.");
-            System.out.println(e.getMessage());
+            System.out.println(Colors.RED + "❌ Book creation failed.: " + e.getMessage() + Colors.RESET);
 
         } finally {
             DBManager.closeConnection();
@@ -103,8 +103,7 @@ public class BookRepositoryImpl implements BookRepository {
             }
 
         } catch (Exception e) {
-            System.out.println("Error reading book by ISBN.");
-            System.out.println(e.getMessage());
+            System.out.println(Colors.RED + "❌ Error reading book by ISBN: " + e.getMessage() + Colors.RESET);
 
         } finally {
             DBManager.closeConnection();
@@ -180,11 +179,9 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public void updateBook(Book book) {
-
     }
 
     @Override
     public void deleteBook(int id) {
-
     }
 }

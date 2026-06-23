@@ -2,6 +2,7 @@ package com.femcoders.repository;
 
 import com.femcoders.config.DBManager;
 import com.femcoders.model.Genre;
+import com.femcoders.view.Colors;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,7 +25,6 @@ public class GenreRepositoryImpl implements GenreRepository {
             statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             statement.setString(1, genre.getName());
-
             statement.executeUpdate();
 
             ResultSet generatedKeys = statement.getGeneratedKeys();
@@ -32,11 +32,10 @@ public class GenreRepositoryImpl implements GenreRepository {
                 genre.setId(generatedKeys.getInt(1));
             }
 
-            System.out.println("Genre create successfully.");
+            // System.out.println(Colors.GREEN + "✅ Genre created successfully." + Colors.RESET);
 
         } catch (Exception e) {
-            System.out.println("Genre creation failed.");
-            System.out.println(e.getMessage());
+            System.out.println(Colors.RED + "❌ Genre creation failed: " + e.getMessage() + Colors.RESET);
 
         } finally {
             DBManager.closeConnection();
@@ -64,13 +63,11 @@ public class GenreRepositoryImpl implements GenreRepository {
                 return genre;
             }
 
-        }catch (Exception e) {
-            System.out.println("Error reading genre by name.");
-            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println(Colors.RED + "❌ Error reading genre by name: " + e.getMessage() + Colors.RESET);
 
-        }finally {
+        } finally {
             DBManager.closeConnection();
-
         }
 
         return null;
@@ -80,18 +77,15 @@ public class GenreRepositoryImpl implements GenreRepository {
     public Genre validateExistingGenre(String name) {
         Genre existingGenre = readGenreByName(name);
 
-        if(existingGenre == null) {
+        if (existingGenre == null) {
             Genre newGenre = new Genre();
-
             newGenre.setName(name);
-
             Genre savedGenre = createGenre(newGenre);
-
-            System.out.println("Genre did not exist in the database. New genre created.");
-
+            System.out.println(Colors.GREEN + "✅ Genre not found. A new genre has been created." + Colors.RESET);
             return savedGenre;
         }
-        System.out.println("Genre already exists. Using existing genre.");
+
+        System.out.println(Colors.GREEN + "✅ Genre found: " + existingGenre.getName() + Colors.RESET);
         return existingGenre;
     }
 
