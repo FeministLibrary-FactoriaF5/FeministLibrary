@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GenreRepositoryImpl implements GenreRepository {
 
@@ -92,4 +94,36 @@ public class GenreRepositoryImpl implements GenreRepository {
         System.out.println("Genre already exists. Using existing genre.");
         return existingGenre;
     }
+
+    @Override
+    public List<Genre> readGenresForBook(int bookId) {
+        List<Genre> genres = new ArrayList<>();
+
+        String sql = "SELECT g.id, g.name FROM genres g " +
+                "JOIN genre_book gb ON g.id = gb.genre_id " +
+                "WHERE gb.book_id = ?";
+
+        try {
+            Connection connection = DBManager.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, bookId);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Genre genre = new Genre(
+                        resultSet.getInt("id"),
+                        resultSet.getString("name")
+                );
+                genres.add(genre);
+            }
+
+        } catch (Exception e) {
+          //  System.out.println(e.getMessage());;
+            e.printStackTrace();
+        }
+
+        return genres;
+    }
+
 }

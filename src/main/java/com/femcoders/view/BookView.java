@@ -88,8 +88,6 @@ public class BookView {
 
         for (Book book : booksList) {
 
-            // System.out.println("id:" + book.getId());
-            // System.out.println("title:" + book.getTitle());
             System.out.println("\n================ BOOK ================");
             System.out.println("ID:            " + book.getId());
             System.out.println("Title:         " + book.getTitle());
@@ -102,12 +100,12 @@ public class BookView {
             System.out.println("Summary:       " + book.getSummary());
 
             System.out.print("Genres:        ");
-            if (book.getGenres() != null && !book.getGenres().isEmpty()) {
-                for (Genre g : book.getGenres()) {
-                    System.out.print(g.getName() + " ");
+                   List<Genre> genres = book.getGenres();
+            for (int i = 0; i < genres.size(); i++) {
+                System.out.print(genres.get(i).getName());
+                if (i < genres.size() - 1) {
+                    System.out.print(", ");
                 }
-            } else {
-                System.out.print("N/A");
             }
 
             System.out.println("\n======================================\n");
