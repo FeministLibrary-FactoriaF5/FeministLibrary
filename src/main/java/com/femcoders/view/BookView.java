@@ -42,9 +42,7 @@ public class BookView {
         String genresInput = scanner.nextLine();
         List<Genre> genres = new ArrayList<>();
         for (String genreName : genresInput.split(",")) {
-            // De momento usamos id=1 como placeholder.
-            // Pendiente: buscar el id real del género en la base de datos.
-            genres.add(new Genre(1, genreName.trim()));
+            genres.add(new Genre(null, genreName.trim()));
         }
 
         Author author = new Author();
