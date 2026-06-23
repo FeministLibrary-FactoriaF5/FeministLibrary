@@ -8,6 +8,7 @@ import com.femcoders.repository.AuthorRepository;
 import com.femcoders.repository.BookRepository;
 import com.femcoders.repository.GenreRepository;
 import com.femcoders.repository.PublisherRepository;
+import com.femcoders.view.Colors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,28 +28,28 @@ public class BookController {
 
     public void createBook(Book book) {
         if (!book.getIsbn().matches("\\d{13}")) {
-            System.out.println("Invalid ISBN. It must contain exactly 13 numeric digits.");
+            System.out.println(Colors.RED + "❌ Invalid ISBN. It must contain exactly 13 numeric digits." + Colors.RESET);
             return;
         }
 
         if (bookRepository.validateExistingIsbn(book.getIsbn())) {
-            System.out.println("This ISBN already exists. We can not add this book.");
+            System.out.println(Colors.RED + "❌ This ISBN already exists. This book can not be added." + Colors.RESET);
             return;
         }
 
         Author author = authorRepository.validateExistingAuthor(book.getAuthor().getName());
+        book.setAuthor(author);
 
-        Publisher publisher = publisherRepository.validateExistingPublisher(book.getPublisher().getName());
-
-        List<Genre> genres = new ArrayList<>();
-
-        for (Genre genre : book.getGenres()){
-            Genre validated = genreRepository.validadeExistingGenre(genre.getName());
-            genres.add(validated);
+        if (book.getPublisher() != null) {
+            Publisher publisher = publisherRepository.validateExistingPublisher(book.getPublisher().getName());
+            book.setPublisher(publisher);
         }
 
-        book.setAuthor(author);
-        book.setPublisher(publisher);
+        List<Genre> genres = new ArrayList<>();
+        for (Genre genre : book.getGenres()){
+            Genre validated = genreRepository.validateExistingGenre(genre.getName());
+            genres.add(validated);
+        }
         book.setGenres(genres);
 
         bookRepository.createBook(book);

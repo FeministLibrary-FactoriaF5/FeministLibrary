@@ -1,5 +1,6 @@
 package com.femcoders.config;
 
+import com.femcoders.view.Colors;
 import io.github.cdimascio.dotenv.Dotenv;
 
 import java.sql.Connection;
@@ -16,20 +17,20 @@ public class DBManager {
 
     public static Connection getConnection() {
         try {
-            System.out.println("Conexión a la base de datos");
+            // System.out.println("Conexión a la base de datos");
             connection = DriverManager.getConnection(URL, USER, PASS);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println(Colors.RED + "❌ Database connection failed: " + e.getMessage() + Colors.RESET);
         }
         return connection;
     }
 
     public static void closeConnection(){
         try {
-            System.out.println("Conexión a la base de datos cerrada");
+            // System.out.println("Conexión a la base de datos cerrada");
             connection.close();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println(Colors.RED + "❌ Error closing connection: " + e.getMessage() + Colors.RESET);
         }
     }
 }
