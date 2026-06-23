@@ -45,7 +45,7 @@ public class GenreRepositoryImpl implements GenreRepository {
 
     @Override
     public Genre readGenreByName(String name) {
-        String sql = "SELECT id, name FROM genre WHERE LOWER(name) = LOWER(?)";
+        String sql = "SELECT id, name FROM genres WHERE LOWER(name) = LOWER(?)";
 
         try {
             connection = DBManager.getConnection();
