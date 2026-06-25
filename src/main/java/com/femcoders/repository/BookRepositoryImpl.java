@@ -178,7 +178,37 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
-    public void updateBook(Book book) {
+    public void updateBookById(int id, Book updatedBook) {
+        // 1. Leer el libro original
+        Book existingBook = readBookById(id);
+
+        // 2. Si no existe → mensaje y return
+        if (existingBook == null) {
+            System.out.println("The book with id " + id + " does not exist.");
+            return;
+        }
+
+        // 3. Pedir datos nuevos a la View (esto lo hará el controller)
+
+        // 4. Validar ISBN si ha cambiado
+        String oldIsbn = existingBook.getIsbn();
+        String newIsbn = updatedBook.getIsbn();
+
+        if (newIsbn != null && !newIsbn.equals(oldIsbn)) {
+            boolean isbnExists = validateExistingIsbn(newIsbn);
+
+            if (isbnExists) {
+                System.out.println(Colors.RED + "❌ Cannot update: ISBN '" + newIsbn + "' already exists." + Colors.RESET);
+                return;
+            }
+        }
+        // 5. Ejecutar UPDATE en la tabla books
+
+        // 6. Actualizar géneros
+
+        // 7. Mensaje final
+
+
     }
 
     @Override

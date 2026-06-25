@@ -75,4 +75,8 @@ public class BookController {
     }
         return books;
     }
+
+    public void updateBookById (int id, Book updatedBook) {
+
+    }
 }
