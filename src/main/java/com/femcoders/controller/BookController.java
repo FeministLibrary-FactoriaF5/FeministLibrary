@@ -91,4 +91,23 @@ public class BookController {
     public void deleteBook(int id) {
         bookRepository.deleteBook(id);
     }
+
+    public List<Book> readAllBooks() {
+
+        List<Book> books = bookRepository.readAllBooks();
+
+        for (Book book : books) {
+
+            Author author = authorRepository.findById(book.getAuthorId());
+
+            Publisher publisher = publisherRepository.findById(book.getPublisherId());
+
+            List<Genre> genres = genreRepository.readGenresForBook(book.getId());
+
+            book.setAuthor(author);
+            book.setPublisher(publisher);
+            book.setGenres(genres);
+    }
+        return books;
+    }
 }

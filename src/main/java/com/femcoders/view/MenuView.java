@@ -54,6 +54,7 @@ public class MenuView {
                     bookView.createBook(scanner);
                     break;
                 case 2:
+                    bookView.searchAllBooks();
                     break;
                 case 3:
                     bookView.searchById(scanner);

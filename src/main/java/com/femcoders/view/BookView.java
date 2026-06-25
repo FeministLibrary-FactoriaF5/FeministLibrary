@@ -40,7 +40,7 @@ public class BookView {
 
         Format format = null;
         while (format == null) {
-            System.out.println(Colors.CYAN + "Format (paperback / hardcover / ebook / audiobook): " + Colors.RESET);
+            System.out.print(Colors.CYAN + "Format (paperback / hardcover / ebook / audiobook): " + Colors.RESET);
             try {
                 format = Format.valueOf(scanner.nextLine().toUpperCase());
             } catch (IllegalArgumentException e) {
@@ -115,6 +115,24 @@ public class BookView {
         }
     }
 
+    public void searchAllBooks() {
+        System.out.println();
+        System.out.println(Colors.PURPLE + Colors.BOLD + "═══════════════════════════════════════" + Colors.RESET);
+        System.out.println(Colors.PURPLE + Colors.BOLD + "          📖 ALL BOOKS" + Colors.RESET);
+        System.out.println(Colors.PURPLE + Colors.BOLD + "═══════════════════════════════════════" + Colors.RESET);
+
+        List<Book> booksList = bookController.readAllBooks();
+
+        if (booksList.isEmpty()) {
+            System.out.println(Colors.RED + "❌ No books found in database." + Colors.RESET);
+            return;
+        }
+
+        System.out.println();
+        System.out.println(Colors.GREEN + "Books found: " + booksList.size() + Colors.RESET);
+        printBooks(booksList, false);
+    }
+
     public void searchByTitle(Scanner scanner) {
         System.out.println();
         System.out.println(Colors.PURPLE + Colors.BOLD + "═══════════════════════════════════════" + Colors.RESET);
@@ -178,29 +196,3 @@ public class BookView {
         }
     }
 }
-
-    // revisar
-        /* for (Book book : booksList) {
-
-            System.out.println("\n================ BOOK ================");
-            System.out.println("ID:            " + book.getId());
-            System.out.println("Title:         " + book.getTitle());
-            System.out.println("Author:        " + (book.getAuthor() != null ? book.getAuthor().getName() : "N/A"));
-            System.out.println("Publisher:     " + (book.getPublisher() != null ? book.getPublisher().getName() : "N/A"));
-            System.out.println("ISBN:          " + book.getIsbn());
-            System.out.println("Year:          " + book.getPublishedYear());
-            System.out.println("Format:        " + book.getFormat());
-            System.out.println("Summary:       " + book.getSummary());
-
-            System.out.print("Genres:        ");
-            List<Genre> genres = book.getGenres();
-            for (int i = 0; i < genres.size(); i++) {
-                System.out.print(genres.get(i).getName());
-                if (i < genres.size() - 1) {
-                    System.out.print(", ");
-                }
-            }
-
-            System.out.println("\n======================================\n");
-        }
-    } */
