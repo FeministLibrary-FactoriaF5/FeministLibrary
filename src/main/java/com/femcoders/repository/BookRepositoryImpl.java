@@ -167,7 +167,7 @@ public class BookRepositoryImpl implements BookRepository {
             
         String sql = "SELECT * FROM books WHERE LOWER(title) = LOWER(?)";
 
-        System.out.println("Buscando: " + title);
+        System.out.println("Searching: " + title);
 
         try {
             connection = DBManager.getConnection();
@@ -177,7 +177,7 @@ public class BookRepositoryImpl implements BookRepository {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                System.out.println("Encontrado: " + resultSet.getString("title"));
+                System.out.println("Found: " + resultSet.getString("title"));
 
                 Book book = new Book();
                 book.setId(resultSet.getInt("id"));
@@ -218,18 +218,13 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public void updateBookById(int id, Book updatedBook) {
-        // 1. Leer el libro original
         Book existingBook = readBookById(id);
 
-        // 2. Si no existe → mensaje y return
         if (existingBook == null) {
             System.out.println("The book with id " + id + " does not exist.");
             return;
         }
 
-        // 3. Pedir datos nuevos a la View (esto lo hará el controller)
-
-        // 4. Validar ISBN si ha cambiado
         String oldIsbn = existingBook.getIsbn();
         String newIsbn = updatedBook.getIsbn();
 
@@ -241,13 +236,61 @@ public class BookRepositoryImpl implements BookRepository {
                 return;
             }
         }
-        // 5. Ejecutar UPDATE en la tabla books
 
-        // 6. Actualizar géneros
+        String sql = "UPDATE books SET title = ?, author_id = ?, publisher_id = ?, isbn = ?, published_year = ?, " +
+                "summary = ?, format = ?::book_format WHERE id = ?";
+        try {
+            connection = DBManager.getConnection();
 
-        // 7. Mensaje final
+            // --- UPDATE BOOK ---
+            statement = connection.prepareStatement(sql);
 
+            statement.setString(1, updatedBook.getTitle());
+            statement.setInt(2,updatedBook.getAuthor().getId());
 
+            if (updatedBook.getPublisher() != null) {
+                statement.setInt(3, updatedBook.getPublisher().getId());
+            } else {
+                statement.setNull(3, Types.INTEGER);
+            }
+
+            statement.setString(4,updatedBook.getIsbn());
+
+            if (updatedBook.getPublishedYear() != null) {
+                statement.setInt(5, updatedBook.getPublishedYear());
+            } else {
+                statement.setNull(5, Types.SMALLINT);
+            }
+
+            statement.setString(6,updatedBook.getSummary());
+            statement.setString(7,updatedBook.getFormat().name().toLowerCase());
+
+            statement.setInt(8,id);
+
+            statement.executeUpdate();
+
+            String deleteSql = "DELETE FROM genre_book WHERE book_id = ?";
+            PreparedStatement deleteStatement = connection.prepareStatement(deleteSql);
+            deleteStatement.setInt(1, id);
+            deleteStatement.executeUpdate();
+
+            String insertSql = "INSERT INTO genre_book (book_id, genre_id) VALUES (?, ?)";
+            PreparedStatement insertStatement = connection.prepareStatement(insertSql);
+
+            for (Genre genre : updatedBook.getGenres()) {
+                insertStatement.setInt(1, id);
+                insertStatement.setInt(2, genre.getId());
+                insertStatement.executeUpdate();
+            }
+
+            System.out.println(Colors.GREEN + "✅ Book updated successfully." + Colors.RESET);
+
+        } catch (Exception e) {
+            System.out.println(Colors.RED + "❌ Book update failed: " + e.getMessage() + Colors.RESET);
+
+        } finally {
+            DBManager.closeConnection();
+        }
     }
 
     @Override
