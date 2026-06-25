@@ -1,6 +1,5 @@
 package com.femcoders.view;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -198,84 +197,98 @@ public class BookView {
     }
 
     public void updateBookById(Scanner scanner) {
-        System.out.println("=== UPDATE BOOK BY ID ===");
-        System.out.print("Enter book ID: ");
+        System.out.println();
+        System.out.println(Colors.PURPLE + Colors.BOLD + "═══════════════════════════════════════" + Colors.RESET);
+        System.out.println(Colors.PURPLE + Colors.BOLD + "          ✏️  UPDATE A BOOK" + Colors.RESET);
+        System.out.println(Colors.PURPLE + Colors.BOLD + "═══════════════════════════════════════" + Colors.RESET);
+
+        System.out.print(Colors.CYAN + "Enter book ID: " + Colors.RESET);
         int id = Integer.parseInt(scanner.nextLine());
 
         Book existingBook = bookController.readBooksById(id);
 
         if (existingBook == null) {
-            System.out.println(Colors.RED + "No book found with that id." + Colors.RESET);
+            System.out.println(Colors.RED + "❌ No book found with ID: " + id + Colors.RESET);
             return;
         }
 
-        System.out.println("\nLeave fields empty to keep current values.\n");
+        System.out.println(Colors.YELLOW + "\nLeave fields empty to keep current values.\n" + Colors.RESET);
 
         // --- TITLE ---
-        System.out.println("Current title: " + existingBook.getTitle());
-        System.out.print("New title (Press Enter to keep current): ");
+        System.out.println(Colors.CYAN + "Current title: " + Colors.RESET + existingBook.getTitle());
+        System.out.print(Colors.CYAN + "New title (Press Enter to keep current): " + Colors.RESET);
         String newTitle = scanner.nextLine();
         String finalTitle = newTitle.isEmpty() ? existingBook.getTitle() : newTitle;
 
         // --- AUTHOR ---
-        System.out.println("Current author: " + existingBook.getAuthor().getName());
-        System.out.print("New author (Press Enter to keep current): ");
+        System.out.println(Colors.CYAN + "Current author: " + Colors.RESET + existingBook.getAuthor().getName());
+        System.out.print(Colors.CYAN + "New author (Press Enter to keep current): " + Colors.RESET);
         String newAuthor = scanner.nextLine();
         String finalAuthorName = newAuthor.isEmpty() ? existingBook.getAuthor().getName() : newAuthor;
 
         // --- PUBLISHER ---
-        System.out.println("Current publisher: " +
+        System.out.println(Colors.CYAN + "Current publisher: " + Colors.RESET +
                 (existingBook.getPublisher() != null ? existingBook.getPublisher().getName() : "N/A"));
-        System.out.print("New publisher (Press Enter to keep / 'none' to remove): ");
+        System.out.print(Colors.CYAN + "New publisher (Press Enter to keep / 'none' to remove): " + Colors.RESET);
         String newPublisher = scanner.nextLine();
 
         Publisher finalPublisher = null;
-
         if (newPublisher.isEmpty()) {
-            finalPublisher = existingBook.getPublisher(); // mantener
+            finalPublisher = existingBook.getPublisher(); // keep
         } else if (newPublisher.equalsIgnoreCase("none")) {
-            finalPublisher = null; // eliminar publisher
+            finalPublisher = null; // delete publisher
         } else {
-            finalPublisher = new Publisher(null, newPublisher.trim()); // crear uno nuevo
+            finalPublisher = new Publisher(null, newPublisher.trim()); // creates a new one
         }
 
         // --- ISBN ---
-        System.out.println("Current ISBN: " + existingBook.getIsbn());
-        System.out.print("New ISBN (Press Enter to keep current): ");
+        System.out.println(Colors.CYAN + "Current ISBN: " + Colors.RESET + existingBook.getIsbn());
+        System.out.print(Colors.CYAN + "New ISBN (Press Enter to keep current): " + Colors.RESET);
         String newIsbn = scanner.nextLine();
         String finalIsbn = newIsbn.isEmpty() ? existingBook.getIsbn() : newIsbn;
 
         // --- YEAR ---
-        System.out.println("Current year: " + existingBook.getPublishedYear());
-        System.out.print("New year (Press Enter to keep current): ");
+        System.out.println(Colors.CYAN + "Current year: " + Colors.RESET + existingBook.getPublishedYear());
+        System.out.print(Colors.CYAN + "New year (Press Enter to keep current): " + Colors.RESET);
         String newYear = scanner.nextLine();
         Integer finalYear = newYear.isEmpty() ? existingBook.getPublishedYear() : Integer.parseInt(newYear);
 
         // --- FORMAT ---
-        System.out.println("Current format: " + existingBook.getFormat());
-        System.out.print("New format (Press Enter to keep current): ");
-        String newFormat = scanner.nextLine();
-        Format finalFormat = newFormat.isEmpty()
-                ? existingBook.getFormat()
-                : Format.valueOf(newFormat.toUpperCase());
+        System.out.println(Colors.CYAN + "Current format: " + Colors.RESET + existingBook.getFormat());
+        Format finalFormat = null;
+        while (finalFormat == null) {
+            System.out.print(Colors.CYAN + "New format (Press Enter to keep / paperback / hardcover / ebook / audiobook): " + Colors.RESET);
+            String newFormat = scanner.nextLine();
+            if (newFormat.isEmpty()) {
+                finalFormat = existingBook.getFormat();
+            } else {
+                try {
+                    finalFormat = Format.valueOf(newFormat.toUpperCase());
+                } catch (IllegalArgumentException e) {
+                    System.out.println(Colors.RED + "❌ Invalid format. Please choose one of: paperback, hardcover, ebook, audiobook." + Colors.RESET);
+                }
+            }
+        }
 
         // --- SUMMARY ---
-        System.out.println("Current summary: " + existingBook.getSummary());
-        System.out.print("New summary (Press Enter to keep current): ");
+        System.out.println(Colors.CYAN + "Current summary: " + Colors.RESET + existingBook.getSummary());
+        System.out.print(Colors.CYAN + "New summary (Press Enter to keep current): " + Colors.RESET);
         String newSummary = scanner.nextLine();
         String finalSummary = newSummary.isEmpty() ? existingBook.getSummary() : newSummary;
 
         // --- GENRES ---
-        System.out.print("Current genres: ");
+        System.out.print(Colors.CYAN + "Current genres: " + Colors.RESET);
         for (Genre g : existingBook.getGenres()) {
             System.out.print(g.getName() + " ");
         }
-        System.out.print("\nNew genres (comma separated, Press Enter to keep current): ");
+
+        System.out.println();
+        System.out.print(Colors.CYAN + "New genres (comma separated, Press Enter to keep current): " + Colors.RESET);
         String newGenres = scanner.nextLine();
 
         List<Genre> finalGenres = new ArrayList<>();
         if (newGenres.isEmpty()) {
-            finalGenres = existingBook.getGenres(); // mantener
+            finalGenres = existingBook.getGenres(); // keep
         } else {
             for (String g : newGenres.split(",")) {
                 finalGenres.add(new Genre(null, g.trim()));
@@ -299,6 +312,6 @@ public class BookView {
 
         // --- SEND TO CONTROLLER ---
         bookController.updateBookById(id, updatedBook);
+        System.out.println(Colors.GREEN + "✅ Book updated successfully." + Colors.RESET);
     }
-
 }

@@ -18,8 +18,7 @@ public class BookController {
     private PublisherRepository publisherRepository;
     private GenreRepository genreRepository;
 
-    public BookController(BookRepository bookRepository, AuthorRepository authorRepository,
-                          PublisherRepository publisherRepository, GenreRepository genreRepository) {
+    public BookController(BookRepository bookRepository, AuthorRepository authorRepository, PublisherRepository publisherRepository, GenreRepository genreRepository) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
         this.publisherRepository = publisherRepository;
@@ -78,7 +77,6 @@ public class BookController {
 
         Author author = authorRepository.findById(book.getAuthorId());
 
-        // publisher es opcional, puede ser null
         Publisher publisher = null;
         if (book.getPublisherId() != null) {
             publisher = publisherRepository.findById(book.getPublisherId());
@@ -95,7 +93,7 @@ public class BookController {
 
     public void updateBookById(int id, Book updatedBook) {
         Author validatedAuthor = authorRepository.validateExistingAuthor(updatedBook.getAuthor().getName());
-        updatedBook.setAuthor(validatedAuthor); // ← faltaba esta línea
+        updatedBook.setAuthor(validatedAuthor);
 
         if (updatedBook.getPublisher() != null) {
             Publisher validatedPublisher = publisherRepository.validateExistingPublisher(updatedBook.getPublisher().getName());
