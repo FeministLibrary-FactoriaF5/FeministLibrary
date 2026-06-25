@@ -1,4 +1,4 @@
-# Feminist Library
+# Feminist Library 📚
 
 ## Descripción del proyecto
 
@@ -6,43 +6,28 @@
 
 El objetivo principal del proyecto es modernizar la organización de los libros mediante un sistema que permita registrar, consultar, actualizar, eliminar y buscar libros de forma sencilla desde la terminal.
 
-La aplicación permite mantener la información de la biblioteca estructurada y actualizada en una base de datos **PostgreSQL**, facilitando la gestión diaria de libros, autoras, editoriales, géneros y formatos.
-
----
-
-## Objetivo
-
-La biblioteca feminista necesita disponer de un sistema que permita gestionar sus libros de manera eficiente.
-
-Con esta aplicación, la administradora podrá:
-
-- Añadir nuevos libros al inventario.
-- Consultar todos los libros registrados.
-- Buscar libros por título.
-- Actualizar información existente.
-- Eliminar libros del sistema.
-- Gestionar autoras, editoriales, géneros y formatos.
-- Mantener una base de datos organizada y actualizada.
+La aplicación mantiene la información estructurada y actualizada en una base de datos **PostgreSQL**, facilitando la gestión diaria de libros, autoras, editoriales, géneros y formatos.
 
 ---
 
 ## Tecnologías utilizadas
 
-- Java
-- PostgreSQL
-- Maven
-- JDBC
-- Git
-- GitHub
-- Variables de entorno con archivo `.env`
+| Tecnología | Versión | Uso |
+|---|---|---|
+| Java | 25 | Lenguaje principal |
+| PostgreSQL | 16+ | Base de datos relacional |
+| Maven | 3.x | Gestión de dependencias y build |
+| JDBC | - | Conexión con la base de datos |
+| JUnit 5 | 5.11.0 | Tests unitarios |
+| Mockito | 5.23.0 | Mocks para tests |
+| dotenv-java | 3.2.0 | Gestión de variables de entorno |
+| Git / GitHub | - | Control de versiones |
 
 ---
 
 ## Arquitectura del proyecto
 
-El proyecto está organizado siguiendo una estructura basada en el patrón **MVC** y el patrón **Repository**.
-
-Esta organización permite separar responsabilidades, mantener el código más limpio y facilitar el mantenimiento del proyecto.
+El proyecto sigue el patrón **MVC (Model - View - Controller)** combinado con el patrón **Repository**, lo que permite separar responsabilidades y facilitar el mantenimiento y las pruebas del código.
 
 ---
 
@@ -51,42 +36,42 @@ Esta organización permite separar responsabilidades, mantener el código más l
 ```text
 FeministLibrary/
 ├── src/
-│   └── main/
+│   ├── main/
+│   │   └── java/
+│   │       └── com/
+│   │           └── femcoders/
+│   │               ├── config/
+│   │               │   └── DBManager.java
+│   │               ├── controller/
+│   │               │   └── BookController.java
+│   │               ├── model/
+│   │               │   ├── Author.java
+│   │               │   ├── Book.java
+│   │               │   ├── Format.java
+│   │               │   ├── Genre.java
+│   │               │   └── Publisher.java
+│   │               ├── repository/
+│   │               │   ├── AuthorRepository.java
+│   │               │   ├── AuthorRepositoryImpl.java
+│   │               │   ├── BookRepository.java
+│   │               │   ├── BookRepositoryImpl.java
+│   │               │   ├── GenreRepository.java
+│   │               │   ├── GenreRepositoryImpl.java
+│   │               │   ├── PublisherRepository.java
+│   │               │   └── PublisherRepositoryImpl.java
+│   │               ├── view/
+│   │               │   ├── BookView.java
+│   │               │   ├── Colors.java
+│   │               │   └── MenuView.java
+│   │               └── Main.java
+│   └── test/
 │       └── java/
-│           └── com/
-│               └── femcoders/
-│                   ├── config/
-│                   │   └── DBManager.java
-│                   │
-│                   ├── controller/
-│                   │   └── BookController.java
-│                   │
-│                   ├── model/
-│                   │   ├── Author.java
-│                   │   ├── Book.java
-│                   │   ├── Format.java
-│                   │   ├── Genre.java
-│                   │   └── Publisher.java
-│                   │
-│                   ├── repository/
-│                   │   ├── AuthorRepository.java
-│                   │   ├── AuthorRepositoryImpl.java
-│                   │   ├── BookRepository.java
-│                   │   ├── BookRepositoryImpl.java
-│                   │   ├── GenreRepository.java
-│                   │   ├── GenreRepositoryImpl.java
-│                   │   ├── PublisherRepository.java
-│                   │   └── PublisherRepositoryImpl.java
-│                   │
-│                   ├── view/
-│                   │   ├── BookView.java
-│                   │   ├── Colors.java
-│                   │   └── MenuView.java
-│                   │
-│                   └── Main.java
-│
+│           └── com/femcoders/
+│               └── repository/
+│                   └── BookRepositoryTest.java
 ├── .env.example
 ├── .gitignore
+├── schema.sql
 └── pom.xml
 ```
 
@@ -96,223 +81,108 @@ FeministLibrary/
 
 ### Config
 
-Contiene la configuración de conexión con la base de datos.
-
-Archivo principal:
-
-```text
-DBManager.java
-```
-
-Esta clase se encarga de gestionar la conexión con PostgreSQL utilizando los datos definidos en las variables de entorno.
-
----
+Gestiona la conexión con la base de datos PostgreSQL leyendo las credenciales desde el archivo `.env`.
 
 ### Model
 
-Contiene las clases que representan las entidades principales del sistema.
-
-Entidades principales:
-
-- `Book`
-- `Author`
-- `Genre`
-- `Publisher`
-- `Format`
-
-Estas clases representan la información que se almacena y se gestiona dentro de la aplicación.
-
----
+Representa las entidades del sistema: `Book`, `Author`, `Genre`, `Publisher` y `Format` (enum con los valores `paperback`, `hardcover`, `ebook`, `audiobook`).
 
 ### Repository
 
-Contiene las interfaces y sus implementaciones para acceder a los datos.
+Interfaces e implementaciones para el acceso a datos mediante JDBC. Cada entidad tiene su propia interfaz y su implementación:
 
-Esta capa se encarga de realizar las operaciones con la base de datos, separando la lógica de persistencia del resto de la aplicación.
-
-Ejemplos:
-
-```text
-BookRepository.java
-BookRepositoryImpl.java
-AuthorRepository.java
-AuthorRepositoryImpl.java
-GenreRepository.java
-GenreRepositoryImpl.java
-PublisherRepository.java
-PublisherRepositoryImpl.java
-```
-
----
+- `BookRepository` / `BookRepositoryImpl`
+- `AuthorRepository` / `AuthorRepositoryImpl`
+- `GenreRepository` / `GenreRepositoryImpl`
+- `PublisherRepository` / `PublisherRepositoryImpl`
 
 ### Controller
 
-Contiene la lógica que conecta la vista con los repositorios.
-
-Archivo principal:
-
-```text
-BookController.java
-```
-
-El controlador recibe las acciones del usuario desde la vista y coordina las operaciones necesarias con la capa de repositorio.
-
----
+`BookController` coordina la lógica entre la vista y los repositorios. Recibe las acciones del usuario, valida los datos y delega las operaciones en la capa de repositorio.
 
 ### View
 
-Contiene la parte visual de la aplicación, implementada mediante terminal.
+Interfaz de usuario por terminal:
 
-Archivos principales:
+- `MenuView.java` — menú principal con navegación por opciones numéricas
+- `BookView.java` — interacción con el usuario para todas las operaciones de libros
+- `Colors.java` — constantes ANSI para colorear la terminal
 
-```text
-BookView.java
-Colors.java
-MenuView.java
+---
+
+## Modelo de base de datos
+
+El modelo está normalizado hasta la **3FN (Tercera Forma Normal)**.
+
+```sql
+books       (id, title, author_id FK, publisher_id FK, isbn UNIQUE, published_year, summary, format)
+authors     (id, name)
+publishers  (id, name)
+genres      (id, name)
+genre_book  (book_id FK, genre_id FK)   ← tabla puente N:M
 ```
 
-- `BookView.java`: gestiona la interacción con el usuario para las operaciones relacionadas con libros.
-- `MenuView.java`: muestra el menú principal de la aplicación.
-- `Colors.java`: permite aplicar colores en la consola para mejorar la experiencia visual del usuario.
+### Reglas de borrado (ON DELETE)
+
+| Relación | Comportamiento |
+|---|---|
+| Borrar autor | Se borran sus libros en cascada (`CASCADE`) |
+| Borrar editorial | El libro queda sin editorial (`SET NULL`) |
+| Borrar género | Se elimina solo la relación libro-género (`CASCADE` en tabla puente) |
+| Borrar libro | Se eliminan sus relaciones de género automáticamente (`CASCADE`) |
 
 ---
 
-### Main
+## Funcionalidades implementadas (CRUD)
 
-Archivo principal de ejecución de la aplicación.
+### Libros ✅
+- ➕ Crear libro (con validación de ISBN y detección de duplicados)
+- 📖 Ver todos los libros
+- 🔍 Buscar por título
+- 🔍 Buscar por ID
+- 🗑️ Eliminar libro con confirmación
+- ✏️ Actualizar libro (en progreso)
 
-```text
-Main.java
-```
+### Búsquedas ✅
+- Buscar por título
+- Buscar por ID
+- Ver todos los libros
 
-Es el punto de entrada del programa.
-
----
-
-## Funcionalidades principales
-
-### Gestión de libros
-
-- Crear libros.
-- Listar todos los libros.
-- Buscar libros por título.
-- Actualizar libros existentes.
-- Eliminar libros por identificador.
-
----
-
-### Gestión de autoras
-
-- Crear autoras.
-- Consultar autoras existentes.
-- Relacionar autoras con libros.
+### Validaciones ✅
+- ISBN de exactamente 13 dígitos numéricos
+- Detección de ISBN duplicado antes de insertar
+- Validación de formato (solo valores del enum: paperback, hardcover, ebook, audiobook)
+- Confirmación antes de eliminar un libro
+- Autoras, editoriales y géneros: si no existen, se crean automáticamente
 
 ---
 
-### Gestión de editoriales
+## Gestión de credenciales
 
-- Crear editoriales.
-- Consultar editoriales existentes.
-- Relacionar editoriales con libros.
+Las credenciales de la base de datos se gestionan mediante un archivo `.env` que **nunca debe subirse al repositorio**.
 
----
-
-### Gestión de géneros
-
-- Crear géneros.
-- Evitar duplicados.
-- Relacionar libros con uno o varios géneros mediante una tabla intermedia.
-
----
-
-### Validaciones
-
-El proyecto incluye validaciones para mejorar la calidad de los datos introducidos por el usuario, como por ejemplo:
-
-- Validación de ISBN.
-- Validación de campos obligatorios.
-- Control de datos duplicados.
-- Comprobación de datos antes de insertar o actualizar registros.
-
----
-
-## Base de datos
-
-El proyecto utiliza **PostgreSQL** como sistema de base de datos relacional.
-
-La aplicación se conecta a la base de datos mediante JDBC.
-
-La configuración de la conexión se gestiona desde la clase:
-
-```text
-src/main/java/com/femcoders/config/DBManager.java
-```
-
----
-
-## Gestión de contraseñas y variables de entorno
-
-Para proteger los datos sensibles, el proyecto utiliza un archivo de variables de entorno.
-
-Las credenciales de la base de datos, como el usuario y la contraseña, no deben escribirse directamente en el código ni compartirse en GitHub.
-
-Por este motivo, el proyecto incluye un archivo de ejemplo:
-
-```text
-.env.example
-```
-
-Este archivo sirve como plantilla para que cada persona del equipo cree su propio archivo `.env`.
-
----
-
-## Archivo `.env.example`
-
-Ejemplo de contenido:
+El proyecto incluye un archivo `.env.example` como plantilla:
 
 ```env
-DB_URL=jdbc:postgresql://localhost:5432/feminist_library
 DB_USER=your_user
-DB_PASSWORD=your_password
+DB_PASS=your_password
 ```
 
-Cada persona debe crear un archivo llamado `.env` en su entorno local y completar sus propios datos:
+Cada persona del equipo debe crear su propio archivo `.env` con sus datos locales:
 
-```env
-DB_URL=jdbc:postgresql://localhost:5432/feminist_library
-DB_USER=postgres
-DB_PASSWORD=mi_contraseña_local
+```bash
+cp .env.example .env
 ```
 
----
-
-## Importante sobre el archivo `.env`
-
-El archivo `.env` contiene información privada y no debe subirse al repositorio.
-
-Por seguridad, debe estar incluido en el archivo `.gitignore`.
-
-Ejemplo:
-
-```gitignore
-.env
-target/
-.idea/
-.vscode/
-*.class
-```
-
-De esta forma, cada persona puede trabajar con sus propias credenciales sin exponer contraseñas ni datos sensibles en GitHub.
+El archivo `.env` está incluido en `.gitignore` para evitar su publicación accidental.
 
 ---
 
 ## Requisitos previos
 
-Antes de ejecutar el proyecto, es necesario tener instalado:
-
-- Java
-- Maven
-- PostgreSQL
+- Java 25
+- Maven 3.x
+- PostgreSQL 16+
 - Git
 
 ---
@@ -323,159 +193,97 @@ Antes de ejecutar el proyecto, es necesario tener instalado:
 
 ```bash
 git clone <URL_DEL_REPOSITORIO>
-```
-
----
-
-### 2. Entrar en el proyecto
-
-```bash
 cd FeministLibrary
 ```
 
----
+### 2. Crear la base de datos y las tablas
 
-### 3. Crear la base de datos
-
-Crear una base de datos en PostgreSQL.
-
-Ejemplo:
-
-```sql
-CREATE DATABASE feminist_library;
+```bash
+psql -U postgres -c "CREATE DATABASE feminist_library;"
+psql -U postgres -d feminist_library -f schema.sql
 ```
 
----
-
-### 4. Crear el archivo `.env`
-
-Copiar el archivo `.env.example` y crear un nuevo archivo llamado `.env`.
+### 3. Configurar el archivo `.env`
 
 ```bash
 cp .env.example .env
 ```
 
-Después, editar el archivo `.env` con los datos reales de conexión a la base de datos.
+Editar `.env` con las credenciales locales de PostgreSQL.
 
-Ejemplo:
-
-```env
-DB_URL=jdbc:postgresql://localhost:5432/feminist_library
-DB_USER=postgres
-DB_PASSWORD=mi_contraseña
-```
-
----
-
-### 5. Compilar el proyecto
+### 4. Compilar el proyecto
 
 ```bash
 mvn clean install
 ```
 
----
-
-### 6. Ejecutar la aplicación
+### 5. Ejecutar la aplicación
 
 ```bash
 mvn exec:java
 ```
 
-También se puede ejecutar directamente desde la clase:
+---
 
-```text
-Main.java
+## Tests
+
+El proyecto incluye tests unitarios con **JUnit 5** y **Mockito**.
+
+Para ejecutar los tests:
+
+```bash
+mvn test
 ```
 
 ---
 
 ## Flujo de trabajo con Git
 
-El equipo trabaja utilizando ramas para organizar las funcionalidades.
-
-Ejemplos de ramas:
-
 ```text
-dev
-feat/create-book
-feat/read-all-books
-feat/update-book
-feat/delete-book
-feat/create-author
-feat/create-publisher
+main
+ └── dev
+      ├── feat/create-book
+      ├── feat/read-all-books
+      ├── feat/update-book
+      ├── feat/delete-book
+      ├── feat/search-by-title
+      ├── feat/create-author
+      └── feat/create-publisher
 ```
 
-Los cambios se desarrollan en ramas individuales o de funcionalidad y posteriormente se integran mediante Pull Request.
-
 El flujo habitual es:
-
-1. Crear una rama desde `dev`.
-2. Desarrollar la funcionalidad.
-3. Hacer commit de los cambios.
-4. Subir la rama al repositorio remoto.
-5. Crear un Pull Request.
-6. Revisar y hacer merge cuando el código funcione correctamente.
-
----
-
-## Estado actual del proyecto
-
-Actualmente el proyecto incluye:
-
-- Estructura Maven organizada.
-- Conexión con PostgreSQL.
-- Uso de archivo `.env` para proteger credenciales.
-- Modelos principales creados.
-- Repositorios para libros, autoras, géneros y editoriales.
-- Controlador de libros.
-- Vista por terminal.
-- Menú principal.
-- Colores en consola.
-- Funcionalidad para leer todos los libros.
-- Validación de ISBN.
-- Tabla intermedia de géneros para evitar duplicados.
-- Trabajo colaborativo con ramas y Pull Requests.
-
----
-
-## Próximas mejoras
-
-- Mejorar la búsqueda por título para que no distinga entre mayúsculas y minúsculas.
-- Completar todas las operaciones CRUD.
-- Añadir tests unitarios.
-- Mejorar la gestión de errores.
-- Mejorar los mensajes mostrados en la terminal.
-- Documentar el modelo de base de datos.
-- Añadir más validaciones para los datos introducidos por el usuario.
-- Mejorar la experiencia de uso del menú principal.
+1. Crear una rama desde `dev`
+2. Desarrollar la funcionalidad
+3. Hacer commit con mensajes en formato Conventional Commits
+4. Subir la rama y crear un Pull Request hacia `dev`
+5. Revisar y hacer merge cuando el código funcione correctamente
 
 ---
 
 ## Buenas prácticas aplicadas
 
-- Separación de responsabilidades.
-- Uso del patrón MVC.
-- Uso del patrón Repository.
-- Uso de interfaces para desacoplar la lógica de acceso a datos.
-- Organización del código por paquetes.
-- Protección de credenciales mediante `.env`.
-- Uso de `.env.example` como plantilla segura.
-- Uso de `.gitignore` para evitar compartir archivos sensibles.
-- Control de versiones con Git.
-- Trabajo colaborativo mediante ramas y Pull Requests.
+- Patrón MVC para separar responsabilidades
+- Patrón Repository para desacoplar el acceso a datos
+- Interfaces para cada repositorio (facilita tests con mocks)
+- Mensajes de usuario centralizados en la View (no en el Controller ni Repository)
+- Protección de credenciales con `.env` y `.gitignore`
+- Base de datos normalizada en 3FN
+- Validaciones tanto en la View (formato) como en el Controller (lógica de negocio)
+- Colores ANSI en terminal para mejorar la experiencia de uso
+- Control de versiones con ramas y Pull Requests
 
 ---
 
 ## Equipo de desarrollo
 
-Proyecto desarrollado como parte de una práctica formativa de backend con Java y PostgreSQL.
+Proyecto desarrollado como práctica formativa de backend con Java y PostgreSQL.
 
-Integrantes:
-
-- Fabiana
-- Aïda
-- Rose
-- Damaris
+| Integrante | GitHub          |
+|---|-----------------|
+| Fabiana | @fabileoruf               |
+| Aïda | @AidaG91        |
+| Rose | @rosana50factoria |
+| Damaris | @damcb1         |
 
 ---
 
