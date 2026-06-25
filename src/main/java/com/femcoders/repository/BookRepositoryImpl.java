@@ -126,7 +126,7 @@ public class BookRepositoryImpl implements BookRepository {
     public List<Book> readBooksByTitle(String title) {
         List<Book> booksList = new ArrayList<>();
             
-        String sql = "SELECT * FROM books WHERE title = ?";
+        String sql = "SELECT * FROM books WHERE LOWER(title) = LOWER(?)";
 
         System.out.println("Buscando: " + title);
 
