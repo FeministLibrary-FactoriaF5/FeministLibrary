@@ -34,13 +34,9 @@ public class Book {
         this.genres = (genres != null) ? genres : new ArrayList<>();
     }
 
-  //  public Book(Integer id, String isbn) {
-    //}
-
-    public Book(Integer id, String isbn) {
+    public Book(int id, String isbn) {
         this.id = id;
         this.isbn = isbn;
-        this.genres = new ArrayList<>();
     }
 
     public Integer getId() {
