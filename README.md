@@ -122,14 +122,18 @@ genres      (id, name)
 genre_book  (book_id FK, genre_id FK)   ← tabla puente N:M
 ```
 
-### Reglas de borrado (ON DELETE)
+### Reglas de borrado configuradas en PostgreSQL
 
-| Relación | Comportamiento |
+Estas reglas están definidas a nivel de base de datos mediante constraints `ON DELETE`, y se ejecutan automáticamente sin intervención del código Java:
+
+| Acción en BD | Comportamiento automático |
 |---|---|
-| Borrar autor | Se borran sus libros en cascada (`CASCADE`) |
-| Borrar editorial | El libro queda sin editorial (`SET NULL`) |
-| Borrar género | Se elimina solo la relación libro-género (`CASCADE` en tabla puente) |
-| Borrar libro | Se eliminan sus relaciones de género automáticamente (`CASCADE`) |
+| Borrar un libro | Sus relaciones en `genre_book` se eliminan automáticamente (`CASCADE`) |
+| Borrar un autor desde BD | Sus libros se eliminan en cascada (`CASCADE`) |
+| Borrar una editorial desde BD | El libro queda sin editorial (`SET NULL`) |
+| Borrar un género desde BD | Se elimina solo la relación libro-género en `genre_book` (`CASCADE`) |
+
+> La aplicación solo implementa la eliminación de libros. Las demás reglas de borrado son comportamiento de PostgreSQL, no funcionalidades de la app.
 
 ---
 
@@ -192,7 +196,7 @@ El archivo `.env` está incluido en `.gitignore` para evitar su publicación acc
 ### 1. Clonar el repositorio
 
 ```bash
-git clone <https://github.com/FeministLibrary-FactoriaF5/FeministLibrary.git>
+git clone <URL_DEL_REPOSITORIO>
 cd FeministLibrary
 ```
 
@@ -234,6 +238,31 @@ Para ejecutar los tests:
 ```bash
 mvn test
 ```
+### Tests añadidos
+
+* Añadido `BookControllerTest#createBook_callsRepositoriesCorrectly`.
+
+  * Verifica que se realiza la validación del autor antes de crear un libro.
+  * Verifica que se invoca correctamente el método `createBook()` del repositorio.
+  * Verifica que el autor validado se asigna correctamente al objeto libro.
+
+* Añadido `BookRepositoryImplTest#createBook_executesInsertSQLCorrectly`.
+
+  * Verifica la correcta ejecución de la sentencia SQL de inserción.
+  * Verifica que todos los parámetros esperados se establecen correctamente en el `PreparedStatement`.
+  * Verifica que el ID generado por la base de datos se asigna correctamente al libro creado.
+  * Utiliza Mockito para simular las interacciones con la base de datos y aislar el comportamiento del repositorio.
+
+### Refactorización
+
+* Modificada la visibilidad del método `insertGenresForBook()` de `private` a `protected` para facilitar su testeo mediante el uso de spies y mocks.
+
+## Testing
+
+* Se han añadido pruebas unitarias utilizando JUnit 5 y Mockito.
+* Las dependencias de base de datos se encuentran completamente simuladas para garantizar pruebas aisladas y reproducibles.
+* Se ha verificado el correcto funcionamiento de las interacciones entre controlador y repositorio durante el proceso de creación de libros.
+* Se ha comprobado la correcta construcción y ejecución de las sentencias SQL asociadas a la creación de registros.
 
 ---
 
@@ -273,7 +302,6 @@ El flujo habitual es:
 - Control de versiones con ramas y Pull Requests
 
 ---
-
 ## Equipo de desarrollo
 
 Proyecto desarrollado como práctica formativa de backend con Java y PostgreSQL.
@@ -289,4 +317,4 @@ Proyecto desarrollado como práctica formativa de backend con Java y PostgreSQL.
 
 ## Licencia
 
-Este proyecto ha sido desarrollado con fines educativos.
+Este proyecto ha sido desarrollado con fines educativos - FemCoders Factoría F5.
