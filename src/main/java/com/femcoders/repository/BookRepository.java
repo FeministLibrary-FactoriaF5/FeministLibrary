@@ -18,7 +18,7 @@ public interface BookRepository {
     Boolean validateExistingIsbn(String isbn);
 
     //UPDATE
-    void updateBook(Book book);
+    void updateBookById(int id, Book updatedBook);
 
     //DELETE
     void deleteBook(int id);
