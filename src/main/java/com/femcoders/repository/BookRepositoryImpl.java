@@ -133,20 +133,20 @@ public class BookRepositoryImpl implements BookRepository {
                 book.setId(resultSet.getInt("id"));
                 book.setTitle(resultSet.getString("title"));
                 book.setIsbn(resultSet.getString("isbn"));
-                book.setPublishedYear(resultSet.getInt("published_year"));
+                book.setPublishedYear((Integer) resultSet.getObject("published_year"));
                 book.setSummary(resultSet.getString("summary"));
                 book.setFormat(Format.valueOf(resultSet.getString("format").toUpperCase()));
 
                 book.setAuthorId(resultSet.getInt("author_id"));
-                book.setPublisherId(resultSet.getInt("publisher_id"));
+
+                Integer publisherId = (Integer) resultSet.getObject("publisher_id");
+                book.setPublisherId(publisherId);
 
                 return book;
             }
 
         } catch (Exception e) {
             System.out.println("Error reading book by Title.");
-            //System.out.println(e.getMessage());
-
             e.printStackTrace();
 
         } finally {

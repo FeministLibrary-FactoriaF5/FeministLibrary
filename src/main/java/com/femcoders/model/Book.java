@@ -14,8 +14,8 @@ public class Book {
     private Format format;
     private List<Genre> genres;
 
-    private int authorId;
-    private int publisherId;
+    private Integer authorId;
+    private Integer publisherId;
 
     public Book() {
         this.genres = new ArrayList<>();
@@ -34,7 +34,13 @@ public class Book {
         this.genres = (genres != null) ? genres : new ArrayList<>();
     }
 
-    public Book(int id, String isbn) {
+  //  public Book(Integer id, String isbn) {
+    //}
+
+    public Book(Integer id, String isbn) {
+        this.id = id;
+        this.isbn = isbn;
+        this.genres = new ArrayList<>();
     }
 
     public Integer getId() {
@@ -111,19 +117,19 @@ public class Book {
 
     // para recuperar los datos de los otros repositorios
 
-    public int getAuthorId() {
+    public Integer getAuthorId() {
         return authorId;
     }
 
-    public void setAuthorId(int authorId) {
+    public void setAuthorId(Integer authorId) {
         this.authorId = authorId;
     }
 
-    public int getPublisherId() {
+    public Integer getPublisherId() {
         return publisherId;
     }
 
-    public void setPublisherId(int publisherId) {
+    public void setPublisherId(Integer publisherId) {
         this.publisherId = publisherId;
     }
 }

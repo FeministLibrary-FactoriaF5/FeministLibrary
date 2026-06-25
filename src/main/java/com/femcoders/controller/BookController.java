@@ -80,7 +80,13 @@ public class BookController {
 
         Author author = authorRepository.findById(book.getAuthorId());
 
-        Publisher publisher = publisherRepository.findById(book.getPublisherId());
+        Publisher publisher = null;
+
+        if (book.getPublisherId() != null) {
+            publisher = publisherRepository.findById(book.getPublisherId());
+        }
+
+        book.setPublisher(publisher);
 
         List<Genre> genres = genreRepository.readGenresForBook(book.getId());
 
@@ -92,6 +98,21 @@ public class BookController {
     }
 
     public void updateBookById (int id, Book updatedBook) {
+        Author validateAuthor = authorRepository.validateExistingAuthor(updatedBook.getAuthor().getName());
 
+        if (updatedBook.getPublisher() != null) {
+            Publisher validatedPublisher =
+                    publisherRepository.validateExistingPublisher(updatedBook.getPublisher().getName());
+            updatedBook.setPublisher(validatedPublisher);
+        }
+
+        List<Genre> validateGenres = new ArrayList<>();
+        for (Genre genre : updatedBook.getGenres()){
+            Genre validated = genreRepository.validateExistingGenre(genre.getName());
+            validateGenres.add(validated);
+        }
+        updatedBook.setGenres(validateGenres);
+
+        bookRepository.updateBookById(id, updatedBook);
     }
 }
