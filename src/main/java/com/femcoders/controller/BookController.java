@@ -27,15 +27,13 @@ public class BookController {
         this.genreRepository = genreRepository;
     }
 
-    public void createBook(Book book) {
+    public String createBook(Book book) {
         if (!book.getIsbn().matches("\\d{13}")) {
-            System.out.println(Colors.RED + "❌ Invalid ISBN. It must contain exactly 13 numeric digits." + Colors.RESET);
-            return;
+            return "Invalid ISBN. It must contain exactly 13 numeric digits.";
         }
 
         if (bookRepository.validateExistingIsbn(book.getIsbn())) {
-            System.out.println(Colors.RED + "❌ This ISBN already exists. This book can not be added." + Colors.RESET);
-            return;
+            return "This ISBN already exists. This book can not be added.";
         }
 
         Author author = authorRepository.validateExistingAuthor(book.getAuthor().getName());
@@ -54,18 +52,15 @@ public class BookController {
         book.setGenres(genres);
 
         bookRepository.createBook(book);
+        return null;
     }
 
     public List<Book> readBooksByTitle(String title) {
-
         List<Book> books = bookRepository.readBooksByTitle(title);
 
         for (Book book : books) {
-
             Author author = authorRepository.findById(book.getAuthorId());
-
             Publisher publisher = publisherRepository.findById(book.getPublisherId());
-
             List<Genre> genres = genreRepository.readGenresForBook(book.getId());
 
             book.setAuthor(author);
@@ -76,12 +71,14 @@ public class BookController {
     }
 
     public Book readBooksById(int id) {
-        Book book=bookRepository.readBookById(id);
+        Book book = bookRepository.readBookById(id);
+
+        if (book == null) {
+            return null;
+        }
 
         Author author = authorRepository.findById(book.getAuthorId());
-
         Publisher publisher = publisherRepository.findById(book.getPublisherId());
-
         List<Genre> genres = genreRepository.readGenresForBook(book.getId());
 
         book.setAuthor(author);
@@ -89,6 +86,10 @@ public class BookController {
         book.setGenres(genres);
 
         return book;
+    }
+
+    public void deleteBook(int id) {
+        bookRepository.deleteBook(id);
     }
 
     public List<Book> readAllBooks() {
