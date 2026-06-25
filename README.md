@@ -192,7 +192,7 @@ El archivo `.env` está incluido en `.gitignore` para evitar su publicación acc
 ### 1. Clonar el repositorio
 
 ```bash
-git clone <URL_DEL_REPOSITORIO>
+git clone <https://github.com/FeministLibrary-FactoriaF5/FeministLibrary.git>
 cd FeministLibrary
 ```
 
