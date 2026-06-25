@@ -12,8 +12,6 @@ public interface BookRepository {
     Book readBookById(int id);
     List<Book> readAllBooks();
     List<Book> readBooksByTitle(String title);
-    List<Book> readBooksByAuthor(String authorName);
-    List<Book> readBooksByGenre(String genre);
 
     Boolean validateExistingIsbn(String isbn);
 

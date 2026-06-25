@@ -16,8 +16,7 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public void createBook(Book book) {
-        String sql = "INSERT INTO books (title, author_id, publisher_id, isbn, published_year, summary, format) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?::book_format)";
+        String sql = "INSERT INTO books (title, author_id, publisher_id, isbn, published_year, summary, format) " + "VALUES (?, ?, ?, ?, ?, ?, ?::book_format)";
 
         try {
             connection = DBManager.getConnection();
@@ -54,7 +53,7 @@ public class BookRepositoryImpl implements BookRepository {
             insertGenresForBook(book);
 
         } catch (Exception e) {
-            System.out.println(Colors.RED + "❌ Book creation failed.: " + e.getMessage() + Colors.RESET);
+            System.out.println(Colors.RED + "❌ Book creation failed: " + e.getMessage() + Colors.RESET);
 
         } finally {
             DBManager.closeConnection();
@@ -116,8 +115,6 @@ public class BookRepositoryImpl implements BookRepository {
 
         String sql = "SELECT * FROM books WHERE id = ?";
 
-        System.out.println("Searching: " + id);
-
         try {
             connection = DBManager.getConnection();
             statement = connection.prepareStatement(sql);
@@ -125,9 +122,7 @@ public class BookRepositoryImpl implements BookRepository {
 
             ResultSet resultSet = statement.executeQuery();
 
-            if (resultSet.next()) {     
-                System.out.println("Encontrado: " + resultSet.getString("title"));
-
+            if (resultSet.next()) {
                 book.setId(resultSet.getInt("id"));
                 book.setTitle(resultSet.getString("title"));
                 book.setIsbn(resultSet.getString("isbn"));
@@ -144,8 +139,7 @@ public class BookRepositoryImpl implements BookRepository {
             }
 
         } catch (Exception e) {
-            System.out.println("Error reading book by Title.");
-            e.printStackTrace();
+            System.out.println(Colors.RED + "❌ Error reading book by ID: " + e.getMessage() + Colors.RESET);
 
         } finally {
             DBManager.closeConnection();
@@ -173,7 +167,6 @@ public class BookRepositoryImpl implements BookRepository {
                 book.setTitle(resultSet.getString("title"));
                 book.setIsbn(resultSet.getString("isbn"));
                 book.setPublishedYear(resultSet.getInt("published_year"));
-                //book.setSummary(resultSet.getString("summary"));
                 book.setFormat(Format.valueOf(resultSet.getString("format").toUpperCase()));
 
                 book.setAuthorId(resultSet.getInt("author_id"));
@@ -183,10 +176,7 @@ public class BookRepositoryImpl implements BookRepository {
             }
 
         } catch (Exception e) {
-            System.out.println("Error reading list books.");
-            //System.out.println(e.getMessage());
-
-            e.printStackTrace();
+            System.out.println(Colors.RED + "❌ Error reading books: " + e.getMessage() + Colors.RESET);
 
         } finally {
             DBManager.closeConnection();
@@ -201,8 +191,6 @@ public class BookRepositoryImpl implements BookRepository {
             
         String sql = "SELECT * FROM books WHERE LOWER(title) = LOWER(?)";
 
-        System.out.println("Searching: " + title);
-
         try {
             connection = DBManager.getConnection();
             statement = connection.prepareStatement(sql);
@@ -211,8 +199,6 @@ public class BookRepositoryImpl implements BookRepository {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                System.out.println("Found: " + resultSet.getString("title"));
-
                 Book book = new Book();
                 book.setId(resultSet.getInt("id"));
                 book.setTitle(resultSet.getString("title"));
@@ -228,10 +214,7 @@ public class BookRepositoryImpl implements BookRepository {
             }
 
         } catch (Exception e) {
-            System.out.println("Error reading book by Title.");
-            //System.out.println(e.getMessage());
-
-            e.printStackTrace();
+            System.out.println(Colors.RED + "❌ Error reading books by title: " + e.getMessage() + Colors.RESET);
 
         } finally {
             DBManager.closeConnection();
@@ -241,21 +224,11 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
-    public List<Book> readBooksByAuthor(String authorName) {
-        return List.of();
-    }
-
-    @Override
-    public List<Book> readBooksByGenre(String genre) {
-        return List.of();
-    }
-
-    @Override
     public void updateBookById(int id, Book updatedBook) {
         Book existingBook = readBookById(id);
 
         if (existingBook == null) {
-            System.out.println("The book with id " + id + " does not exist.");
+            System.out.println(Colors.RED + "❌ No book found with ID: " + id + Colors.RESET);
             return;
         }
 

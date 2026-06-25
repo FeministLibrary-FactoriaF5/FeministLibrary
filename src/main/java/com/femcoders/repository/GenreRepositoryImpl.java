@@ -18,7 +18,7 @@ public class GenreRepositoryImpl implements GenreRepository {
 
     @Override
     public Genre createGenre(Genre genre) {
-        String sql = "INSERT INTO genres (name) VALUES (LOWER(?))";
+        String sql = "INSERT INTO genres (name) VALUES (?)";
 
         try {
             connection = DBManager.getConnection();
@@ -28,11 +28,9 @@ public class GenreRepositoryImpl implements GenreRepository {
             statement.executeUpdate();
 
             ResultSet generatedKeys = statement.getGeneratedKeys();
-            if(generatedKeys.next()) {
+            if (generatedKeys.next()) {
                 genre.setId(generatedKeys.getInt(1));
             }
-
-            // System.out.println(Colors.GREEN + "✅ Genre created successfully." + Colors.RESET);
 
         } catch (Exception e) {
             System.out.println(Colors.RED + "❌ Genre creation failed: " + e.getMessage() + Colors.RESET);
@@ -93,13 +91,11 @@ public class GenreRepositoryImpl implements GenreRepository {
     public List<Genre> readGenresForBook(int bookId) {
         List<Genre> genres = new ArrayList<>();
 
-        String sql = "SELECT g.id, g.name FROM genres g " +
-                "JOIN genre_book gb ON g.id = gb.genre_id " +
-                "WHERE gb.book_id = ?";
+        String sql = "SELECT g.id, g.name FROM genres g " + "JOIN genre_book gb ON g.id = gb.genre_id " + "WHERE gb.book_id = ?";
 
         try {
-            Connection connection = DBManager.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql);
+            connection = DBManager.getConnection();
+            statement = connection.prepareStatement(sql);
             statement.setInt(1, bookId);
 
             ResultSet resultSet = statement.executeQuery();
@@ -113,11 +109,12 @@ public class GenreRepositoryImpl implements GenreRepository {
             }
 
         } catch (Exception e) {
-          //  System.out.println(e.getMessage());;
-            e.printStackTrace();
+            System.out.println(Colors.RED + "❌ Error reading genres for book: " + e.getMessage() + Colors.RESET);
+
+        } finally {
+            DBManager.closeConnection();
         }
 
         return genres;
     }
-
 }

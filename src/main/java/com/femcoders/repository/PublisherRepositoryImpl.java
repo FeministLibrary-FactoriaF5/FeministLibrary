@@ -1,7 +1,6 @@
 package com.femcoders.repository;
 
 import com.femcoders.config.DBManager;
-import com.femcoders.model.Author;
 import com.femcoders.model.Publisher;
 import com.femcoders.view.Colors;
 
@@ -31,7 +30,6 @@ public class PublisherRepositoryImpl implements PublisherRepository {
                 publisher.setId(generatedKeys.getInt(1));
             }
 
-            // System.out.println(Colors.GREEN + "✅ Publisher created successfully." + Colors.RESET);
             return publisher;
 
         } catch (Exception e) {
@@ -50,15 +48,14 @@ public class PublisherRepositoryImpl implements PublisherRepository {
         try {
             connection = DBManager.getConnection();
             statement = connection.prepareStatement(sql);
-
             statement.setString(1, name);
 
             ResultSet resultSetPublishers = statement.executeQuery();
 
             if (resultSetPublishers.next()) {
-                int id = resultSetPublishers.getInt("id");
-                String publisherName = resultSetPublishers.getString("name");
-                return new Publisher(id, publisherName);
+                return new Publisher(
+                        resultSetPublishers.getInt("id"),
+                        resultSetPublishers.getString("name"));
             }
 
         } catch (Exception e) {
@@ -77,11 +74,8 @@ public class PublisherRepositoryImpl implements PublisherRepository {
 
         if (existingPublisher == null) {
             Publisher newPublisher = new Publisher();
-
             newPublisher.setName(name);
-
             Publisher savedPublisher = createPublisher(newPublisher);
-
             System.out.println(Colors.GREEN + "✅ Publisher not found. A new publisher has been created." + Colors.RESET);
             return savedPublisher;
         }
@@ -94,28 +88,27 @@ public class PublisherRepositoryImpl implements PublisherRepository {
     public Publisher findById(int id){
 
         String sql = "SELECT * FROM publishers WHERE id = ?";
-         try {
-            Connection connection = DBManager.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql);
 
-            statement.setInt(1, id);
+         try {
+             connection = DBManager.getConnection();
+             statement = connection.prepareStatement(sql);
+             statement.setInt(1, id);
 
             ResultSet rs = statement.executeQuery();
 
-            if(rs.next()) {
-               Publisher publisher = new Publisher();
-                publisher.setId(rs.getInt("id"));
-                publisher.setName(rs.getString("name"));
-
-                return publisher;
+            if (rs.next()) {
+                return new Publisher(
+                        rs.getInt("id"),
+                        rs.getString("name"));
             }
 
-        } catch(Exception e){
-            e.printStackTrace();
-        }
+        } catch (Exception e) {
+             System.out.println(Colors.RED + "❌ Error reading publisher by ID: " + e.getMessage() + Colors.RESET);
 
+        } finally {
+             DBManager.closeConnection();
+         }
 
         return null;
     }
-
 }
