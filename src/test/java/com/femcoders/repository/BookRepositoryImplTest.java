@@ -1,4 +1,4 @@
-package con.femcoders.repository;
+package com.femcoders.repository;
 
 public class BookRepositoryImplTest {
 }
