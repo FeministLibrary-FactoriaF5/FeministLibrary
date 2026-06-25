@@ -99,7 +99,8 @@ public class BookView {
             System.out.println("ID:            " + book.getId());
             System.out.println("Title:         " + book.getTitle());
             System.out.println("Author:        " + (book.getAuthor() != null ? book.getAuthor().getName() : "N/A"));
-            System.out.println("Publisher:     " + (book.getPublisher() != null ? book.getPublisher().getName() : "N/A"));
+            System.out
+                    .println("Publisher:     " + (book.getPublisher() != null ? book.getPublisher().getName() : "N/A"));
             System.out.println("ISBN:          " + book.getIsbn());
             System.out.println("Year:          " + book.getPublishedYear());
             System.out.println("Format:        " + book.getFormat());
@@ -151,5 +152,42 @@ public class BookView {
 
         System.out.println("\n======================================\n");
 
+    }
+
+    public void SearchAllBooks() {
+        System.out.println("=== Search all books ===");
+        
+        List<Book> booksList = bookController.readAllBooks();
+
+        if (booksList.isEmpty()) {
+            System.out.println("No books found in database.");
+            return;
+        }
+
+        System.out.println("Books Found:");
+
+        for (Book book : booksList) {
+
+            System.out.println("\n================ BOOK ================");
+            System.out.println("ID:            " + book.getId());
+            System.out.println("Title:         " + book.getTitle());
+            System.out.println("Author:        " + (book.getAuthor() != null ? book.getAuthor().getName() : "N/A"));
+            System.out.println("Publisher:     " + (book.getPublisher() != null ? book.getPublisher().getName() : "N/A"));
+            System.out.println("ISBN:          " + book.getIsbn());
+            System.out.println("Year:          " + book.getPublishedYear());
+            System.out.println("Format:        " + book.getFormat());
+            //System.out.println("Summary:       " + book.getSummary());
+
+            System.out.print("Genres:        ");
+            List<Genre> genres = book.getGenres();
+            for (int i = 0; i < genres.size(); i++) {
+                System.out.print(genres.get(i).getName());
+                if (i < genres.size() - 1) {
+                    System.out.print(", ");
+                }
+            }
+
+            System.out.println("\n======================================\n");
+        }
     }
 }

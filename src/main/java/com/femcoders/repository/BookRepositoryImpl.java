@@ -118,7 +118,7 @@ public class BookRepositoryImpl implements BookRepository {
 
         String sql = "SELECT * FROM books WHERE id = ?";
 
-        System.out.println("Buscando: " + id);
+        System.out.println("Searching: " + id);
 
         try {
             connection = DBManager.getConnection();
@@ -158,7 +158,43 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public List<Book> readAllBooks() {
-        return List.of();
+        List<Book> booksList = new ArrayList<>();
+            
+        String sql = "SELECT * FROM books";
+
+        try {
+            connection = DBManager.getConnection();
+            statement = connection.prepareStatement(sql);
+            
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+
+                Book book = new Book();
+                book.setId(resultSet.getInt("id"));
+                book.setTitle(resultSet.getString("title"));
+                book.setIsbn(resultSet.getString("isbn"));
+                book.setPublishedYear(resultSet.getInt("published_year"));
+                //book.setSummary(resultSet.getString("summary"));
+                book.setFormat(Format.valueOf(resultSet.getString("format").toUpperCase()));
+
+                book.setAuthorId(resultSet.getInt("author_id"));
+                book.setPublisherId(resultSet.getInt("publisher_id"));
+                
+                booksList.add(book);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error reading list books.");
+            //System.out.println(e.getMessage());
+
+            e.printStackTrace();
+
+        } finally {
+            DBManager.closeConnection();
+        }
+        
+        return booksList;
     }
 
     @Override
@@ -167,7 +203,7 @@ public class BookRepositoryImpl implements BookRepository {
             
         String sql = "SELECT * FROM books WHERE LOWER(title) = LOWER(?)";
 
-        System.out.println("Buscando: " + title);
+        System.out.println("Searching: " + title);
 
         try {
             connection = DBManager.getConnection();
@@ -177,7 +213,7 @@ public class BookRepositoryImpl implements BookRepository {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                System.out.println("Encontrado: " + resultSet.getString("title"));
+                System.out.println("Found: " + resultSet.getString("title"));
 
                 Book book = new Book();
                 book.setId(resultSet.getInt("id"));
