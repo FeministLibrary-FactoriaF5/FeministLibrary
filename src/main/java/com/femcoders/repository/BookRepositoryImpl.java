@@ -61,7 +61,7 @@ public class BookRepositoryImpl implements BookRepository {
         }
     }
 
-    private void insertGenresForBook(Book book) throws SQLException {
+    protected void insertGenresForBook(Book book) throws SQLException {
         String genreSql = "INSERT INTO genre_book (book_id, genre_id) VALUES (?, ?)";
         PreparedStatement genreStatement = connection.prepareStatement(genreSql);
 
