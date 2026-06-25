@@ -53,8 +53,6 @@ public class BookRepositoryImpl implements BookRepository {
 
             insertGenresForBook(book);
 
-            System.out.println(Colors.GREEN + "✅ Book created successfully." + Colors.RESET);
-
         } catch (Exception e) {
             System.out.println(Colors.RED + "❌ Book creation failed.: " + e.getMessage() + Colors.RESET);
 
@@ -222,5 +220,17 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public void deleteBook(int id) {
+        String sql = "DELETE FROM books WHERE id = ?";
+
+        try {
+            connection = DBManager.getConnection();
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println(Colors.RED + "❌ Book deletion failed: " + e.getMessage() + Colors.RESET);
+        } finally {
+            DBManager.closeConnection();
+        }
     }
 }

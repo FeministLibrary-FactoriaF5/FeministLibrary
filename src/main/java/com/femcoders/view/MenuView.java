@@ -40,7 +40,7 @@ public class MenuView {
             System.out.println(Colors.PURPLE + Colors.BOLD +
                     "═════════════════════════════════════" + Colors.RESET);
             System.out.print(Colors.YELLOW + Colors.BOLD +
-                    "  Select a number between 0 and 7: " + Colors.RESET);
+                    "  Select a number between 0 and 8: " + Colors.RESET);
 
             int option = scanner.nextInt();
             scanner.nextLine();
@@ -61,9 +61,11 @@ public class MenuView {
                 case 4:
                     bookView.searchByTitle(scanner);
                     break;
-
+                case 8:
+                    bookView.deleteBook(scanner);
+                    break;
                 default:
-                    System.out.println(Colors.RED + "❌Invalid option. Please enter a number from 0 to 7." + Colors.RESET);
+                    System.out.println(Colors.RED + "❌Invalid option. Please enter a number from 0 to 8." + Colors.RESET);
 
             }
 

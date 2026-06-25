@@ -35,6 +35,8 @@ public class Book {
     }
 
     public Book(int id, String isbn) {
+        this.id = id;
+        this.isbn = isbn;
     }
 
     public Integer getId() {
