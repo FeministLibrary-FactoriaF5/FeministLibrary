@@ -57,7 +57,6 @@ public class BookController {
     }
 
     public List<Book> readBooksByTitle(String title) {
-        // return bookRepository.readBooksByTitle(title);
 
         List<Book> books = bookRepository.readBooksByTitle(title);
 
@@ -74,5 +73,21 @@ public class BookController {
             book.setGenres(genres);
     }
         return books;
+    }
+
+    public Book readBooksById(int id) {
+        Book book=bookRepository.readBookById(id);
+
+        Author author = authorRepository.findById(book.getAuthorId());
+
+        Publisher publisher = publisherRepository.findById(book.getPublisherId());
+
+        List<Genre> genres = genreRepository.readGenresForBook(book.getId());
+
+        book.setAuthor(author);
+        book.setPublisher(publisher);
+        book.setGenres(genres);
+
+        return book;
     }
 }

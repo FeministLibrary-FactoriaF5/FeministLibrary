@@ -30,11 +30,12 @@ public class MenuView {
                     "═════════════════════════════════════" + Colors.RESET);
             System.out.println(Colors.YELLOW + "  1. ➕ Create book" + Colors.RESET);
             System.out.println(Colors.CYAN + "  2. 📖 View all books" + Colors.RESET);
-            System.out.println(Colors.CYAN + "  3. 🔍 Find book by title" + Colors.RESET);
-            System.out.println(Colors.CYAN + "  4. 🔍 Find book by author" + Colors.RESET);
-            System.out.println(Colors.CYAN + "  5. 🔍 Find book by genre" + Colors.RESET);
-            System.out.println(Colors.BLUE + "  6. ✏️ Update book info" + Colors.RESET);
-            System.out.println(Colors.RED + "  7. 🗑️ Delete a book" + Colors.RESET);
+            System.out.println(Colors.CYAN + "  3. 🔍 Find book by id" + Colors.RESET);
+            System.out.println(Colors.CYAN + "  4. 🔍 Find book by title" + Colors.RESET);
+            System.out.println(Colors.CYAN + "  5. 🔍 Find book by author" + Colors.RESET);
+            System.out.println(Colors.CYAN + "  6. 🔍 Find book by genre" + Colors.RESET);
+            System.out.println(Colors.BLUE + "  7. ✏️ Update book info" + Colors.RESET);
+            System.out.println(Colors.RED + "  8. 🗑️ Delete a book" + Colors.RESET);
             System.out.println(Colors.WHITE +  "  0. 👋 Exit" + Colors.RESET);
             System.out.println(Colors.PURPLE + Colors.BOLD +
                     "═════════════════════════════════════" + Colors.RESET);
@@ -55,6 +56,9 @@ public class MenuView {
                 case 2:
                     break;
                 case 3:
+                    bookView.searchById(scanner);
+                    break;
+                case 4:
                     bookView.searchByTitle(scanner);
                     break;
 
