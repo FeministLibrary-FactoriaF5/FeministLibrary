@@ -2,11 +2,14 @@ package com.femcoders.repository;
 
 import com.femcoders.config.DBManager;
 import com.femcoders.model.Genre;
+import com.femcoders.view.Colors;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GenreRepositoryImpl implements GenreRepository {
 
@@ -22,7 +25,6 @@ public class GenreRepositoryImpl implements GenreRepository {
             statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             statement.setString(1, genre.getName());
-
             statement.executeUpdate();
 
             ResultSet generatedKeys = statement.getGeneratedKeys();
@@ -30,11 +32,10 @@ public class GenreRepositoryImpl implements GenreRepository {
                 genre.setId(generatedKeys.getInt(1));
             }
 
-            System.out.println("Genre create successfully.");
+            // System.out.println(Colors.GREEN + "✅ Genre created successfully." + Colors.RESET);
 
         } catch (Exception e) {
-            System.out.println("Genre creation failed.");
-            System.out.println(e.getMessage());
+            System.out.println(Colors.RED + "❌ Genre creation failed: " + e.getMessage() + Colors.RESET);
 
         } finally {
             DBManager.closeConnection();
@@ -62,34 +63,61 @@ public class GenreRepositoryImpl implements GenreRepository {
                 return genre;
             }
 
-        }catch (Exception e) {
-            System.out.println("Error reading genre by name.");
-            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println(Colors.RED + "❌ Error reading genre by name: " + e.getMessage() + Colors.RESET);
 
-        }finally {
+        } finally {
             DBManager.closeConnection();
-
         }
 
         return null;
     }
 
     @Override
-    public Genre validadeExistingGenre(String name) {
+    public Genre validateExistingGenre(String name) {
         Genre existingGenre = readGenreByName(name);
 
-        if(existingGenre == null) {
+        if (existingGenre == null) {
             Genre newGenre = new Genre();
-
             newGenre.setName(name);
-
             Genre savedGenre = createGenre(newGenre);
-
-            System.out.println("Genre did not exist in the database. New genre created.");
-
+            System.out.println(Colors.GREEN + "✅ Genre not found. A new genre has been created." + Colors.RESET);
             return savedGenre;
         }
-        System.out.println("Genre already exists. Using existing genre.");
+
+        System.out.println(Colors.GREEN + "✅ Genre found: " + existingGenre.getName() + Colors.RESET);
         return existingGenre;
     }
+
+    @Override
+    public List<Genre> readGenresForBook(int bookId) {
+        List<Genre> genres = new ArrayList<>();
+
+        String sql = "SELECT g.id, g.name FROM genres g " +
+                "JOIN genre_book gb ON g.id = gb.genre_id " +
+                "WHERE gb.book_id = ?";
+
+        try {
+            Connection connection = DBManager.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, bookId);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Genre genre = new Genre(
+                        resultSet.getInt("id"),
+                        resultSet.getString("name")
+                );
+                genres.add(genre);
+            }
+
+        } catch (Exception e) {
+          //  System.out.println(e.getMessage());;
+            e.printStackTrace();
+        }
+
+        return genres;
+    }
+
 }

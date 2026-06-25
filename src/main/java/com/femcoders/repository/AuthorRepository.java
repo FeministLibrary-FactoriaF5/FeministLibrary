@@ -9,4 +9,7 @@ public interface AuthorRepository {
     // READ
     Author readAuthorByName(String name);
     Author validateExistingAuthor(String name);
+
+    Author findById(int id);
+
 }
