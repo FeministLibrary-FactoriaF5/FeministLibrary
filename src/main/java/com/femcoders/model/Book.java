@@ -21,8 +21,7 @@ public class Book {
         this.genres = new ArrayList<>();
     }
 
-    public Book(Integer id, String title, Author author, Publisher publisher, String isbn, Integer publishedYear,
-            String summary, Format format, List<Genre> genres) {
+    public Book(Integer id, String title, Author author, Publisher publisher, String isbn, Integer publishedYear, String summary, Format format, List<Genre> genres) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -110,8 +109,6 @@ public class Book {
     public void setGenres(List<Genre> genres) {
         this.genres = (genres != null) ? genres : new ArrayList<>();
     }
-
-    // para recuperar los datos de los otros repositorios
 
     public Integer getAuthorId() {
         return authorId;

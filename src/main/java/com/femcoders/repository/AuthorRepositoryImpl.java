@@ -16,7 +16,7 @@ public class AuthorRepositoryImpl implements AuthorRepository {
 
     @Override
     public Author createAuthor(Author author) {
-        String sql = "INSERT INTO authors (name) VALUES (LOWER(?))";
+        String sql = "INSERT INTO authors (name) VALUES (?)";
 
         try {
             connection = DBManager.getConnection();
@@ -29,8 +29,6 @@ public class AuthorRepositoryImpl implements AuthorRepository {
             if (generatedKeys.next()) {
                 author.setId(generatedKeys.getInt(1));
             }
-
-            // System.out.println(Colors.GREEN + "✅ Author created successfully." + Colors.RESET);
 
         } catch (Exception e) {
             System.out.println(Colors.RED + "❌ Author creation failed: " + e.getMessage() + Colors.RESET);
@@ -92,23 +90,23 @@ public class AuthorRepositoryImpl implements AuthorRepository {
         String sql = "SELECT * FROM authors WHERE id = ?";
 
         try {
-            Connection connection = DBManager.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql);
-
+            connection = DBManager.getConnection();
+            statement = connection.prepareStatement(sql);
             statement.setInt(1, id);
 
             ResultSet rs = statement.executeQuery();
 
-            if(rs.next()) {
-                Author author = new Author();
-                author.setId(rs.getInt("id"));
-                author.setName(rs.getString("name"));
-
-                return author;
+            if (rs.next()) {
+                return new Author(
+                        rs.getInt("id"),
+                        rs.getString("name"));
             }
 
-        } catch(Exception e){
-            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println(Colors.RED + "❌ Error reading author by ID: " + e.getMessage() + Colors.RESET);
+
+        } finally {
+            DBManager.closeConnection();
         }
 
         return null;
