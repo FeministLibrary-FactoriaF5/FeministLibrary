@@ -67,11 +67,12 @@ FeministLibrary/
 │   └── test/
 │       └── java/
 │           └── com/femcoders/
+│               └── controller/
+│               │   └── BookControllerTest.java
 │               └── repository/
-│                   └── BookRepositoryTest.java
+│                   └── BookRepositoryImplTest.java
 ├── .env.example
 ├── .gitignore
-├── schema.sql
 └── pom.xml
 ```
 
